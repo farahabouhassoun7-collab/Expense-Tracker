@@ -173,6 +173,23 @@
            ═══════════════════════════════════════════════════════════════ -->
       <section id="page-dashboard" class="page-section" role="main" aria-label="Dashboard">
 
+        <!-- Exchange Rate Bar (USD to SYP Conversion) -->
+        <div class="exchange-rate-bar card" id="exchange-rate-card">
+          <div class="exchange-rate-bar__info">
+            <svg class="exchange-rate-bar__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m17 3 4 4-4 4"/>
+              <path d="M3 7h18"/>
+              <path d="m7 21-4-4 4-4"/>
+              <path d="M21 17H3"/>
+            </svg>
+            <span class="exchange-rate-bar__label" data-i18n="ex_rate_label">USD ➔ SYP Exchange Rate</span>
+          </div>
+          <div class="exchange-rate-bar__input-group">
+            <input type="number" id="usd-to-syp-rate-input" class="input input--rate" value="15000" min="0" step="100">
+            <span class="exchange-rate-bar__suffix">ل.س / $</span>
+          </div>
+        </div>
+
         <!-- Summary cards grid -->
         <div class="summary-grid" id="summary-grid">
 
@@ -518,6 +535,7 @@
                 <option value="GBP">British Pound (GBP)</option>
                 <option value="JPY">Japanese Yen (JPY)</option>
                 <option value="INR">Indian Rupee (INR)</option>
+                <option value="SYP" data-i18n="curr_syp">Syrian Pound (SYP)</option>
               </select>
             </div>
 

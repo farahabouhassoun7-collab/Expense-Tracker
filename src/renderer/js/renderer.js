@@ -1,11 +1,11 @@
 'use strict';
 
-import { initDashboard, setDashboardCurrency, loadDashboard } from './dashboard.js';
-import { initTransactions, setTransactionsCurrency, loadTransactions } from './transactions.js';
+import { initDashboard, setDashboardCurrency, loadDashboard, setDashboardExchangeRate } from './dashboard.js';
+import { initTransactions, setTransactionsCurrency, loadTransactions, setTransactionsExchangeRate } from './transactions.js';
 import { initStatistics, setStatisticsCurrency, loadStatistics } from './statistics.js';
-import { initSettings, loadSettings } from './settings.js';
+import { initSettings, loadSettings, updateExchangeRate } from './settings.js';
 import { validateForm } from './form-validator.js';
-import { applyTheme } from './theme.js';
+import { applyTheme, getCurrencySymbol } from './theme.js';
 import { applyLanguage, translate } from './translations.js';
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -135,16 +135,21 @@ async function refreshActivePage() {
       setTransactionsCurrency(settings.currency);
       setStatisticsCurrency(settings.currency);
 
+      setDashboardExchangeRate(settings.usd_to_syp_rate || 15000);
+      setTransactionsExchangeRate(settings.usd_to_syp_rate || 15000);
+
+      const rateInput = document.getElementById('usd-to-syp-rate-input');
+      if (rateInput) {
+        rateInput.value = settings.usd_to_syp_rate || 15000;
+      }
+      const exRateCard = document.getElementById('exchange-rate-card');
+      if (exRateCard) {
+        exRateCard.classList.toggle('hidden', settings.currency !== 'USD');
+      }
+
       const prefixElement = document.getElementById('modal-amount-prefix');
-      const currencySymbolMap = {
-        USD: '$',
-        EUR: '€',
-        GBP: '£',
-        JPY: '¥',
-        INR: '₹',
-      };
       if (prefixElement) {
-        prefixElement.textContent = currencySymbolMap[settings.currency] || '$';
+        prefixElement.textContent = getCurrencySymbol(settings.currency);
       }
     }
     await loadActivePageData();
@@ -507,8 +512,25 @@ async function initApp() {
         setDashboardCurrency(settings.currency);
         setTransactionsCurrency(settings.currency);
         setStatisticsCurrency(settings.currency);
+        setDashboardExchangeRate(settings.usd_to_syp_rate || 15000);
+        setTransactionsExchangeRate(settings.usd_to_syp_rate || 15000);
         applyTheme(settings.theme);
         applyLanguage(settings.language || 'en');
+
+        const rateInput = document.getElementById('usd-to-syp-rate-input');
+        if (rateInput) {
+          rateInput.value = settings.usd_to_syp_rate || 15000;
+          rateInput.addEventListener('change', async () => {
+            const rate = Number(rateInput.value) || 0;
+            await updateExchangeRate(rate);
+            if (showToast) showToast(translate('msg_rate_updated'), 'success');
+            await refreshActivePage();
+          });
+        }
+        const exRateCard = document.getElementById('exchange-rate-card');
+        if (exRateCard) {
+          exRateCard.classList.toggle('hidden', settings.currency !== 'USD');
+        }
       }
     }
   } catch (err) {

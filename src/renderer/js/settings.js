@@ -23,6 +23,7 @@ async function persistSettings(overrides) {
     currency: overrides.currency ?? currentResult.data.currency,
     theme: overrides.theme ?? currentResult.data.theme,
     language: overrides.language ?? currentResult.data.language,
+    usd_to_syp_rate: overrides.usd_to_syp_rate ?? currentResult.data.usd_to_syp_rate,
   };
 
   const updateResult = await window.api.updateSettings(payload);
@@ -137,4 +138,8 @@ export async function loadSettings() {
   }
 
   return settings;
+}
+
+export async function updateExchangeRate(rate) {
+  return await persistSettings({ usd_to_syp_rate: Number(rate) });
 }

@@ -63,6 +63,8 @@ export const translations = {
     settings_db_location_label: "Database Location",
     settings_total_transactions_label: "Total Transactions",
     settings_language_label: "Language",
+    ex_rate_label: "USD ➔ SYP Exchange Rate",
+    curr_syp: "Syrian Pound (SYP)",
 
     // Modal Add/Edit
     modal_title_add_income: "Add Income",
@@ -104,7 +106,8 @@ export const translations = {
     msg_settings_save_error: "Failed to save settings",
     msg_currency_updated: "Currency updated.",
     msg_theme_updated: "Theme updated.",
-    msg_language_updated: "Language updated.",
+    msg_language_updated: "Language preference updated.",
+    msg_rate_updated: "Exchange rate updated successfully.",
     msg_db_load_error: "Failed to load database path.",
     msg_invalid_title: "Title is required (1-100 characters).",
     msg_invalid_amount: "Amount must be a positive number.",
@@ -176,6 +179,8 @@ export const translations = {
     settings_db_location_label: "موقع قاعدة البيانات",
     settings_total_transactions_label: "إجمالي المعاملات",
     settings_language_label: "اللغة",
+    ex_rate_label: "سعر الصرف (USD ➔ SYP)",
+    curr_syp: "الليرة السورية (SYP)",
 
     // Modal Add/Edit
     modal_title_add_income: "إضافة دخل",
@@ -218,6 +223,7 @@ export const translations = {
     msg_currency_updated: "تم تحديث العملة.",
     msg_theme_updated: "تم تحديث المظهر.",
     msg_language_updated: "تم تحديث اللغة.",
+    msg_rate_updated: "تم تحديث سعر الصرف بنجاح.",
     msg_db_load_error: "فشل تحميل مسار قاعدة البيانات.",
     msg_invalid_title: "العنوان مطلوب (من 1 إلى 100 حرف).",
     msg_invalid_amount: "يجب أن تكون القيمة رقماً موجباً.",

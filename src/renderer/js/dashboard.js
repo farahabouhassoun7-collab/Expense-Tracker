@@ -4,9 +4,14 @@ import { formatCurrency } from './theme.js';
 import { translate, translateCategory } from './translations.js';
 
 let currentCurrency = 'USD';
+let currentExchangeRate = 15000;
 let navigateTo = null;
 let showToast = null;
 let dashboardChart = null;
+
+export function setDashboardExchangeRate(rate) {
+  currentExchangeRate = Number(rate) || 15000;
+}
 
 const categoryColorVariables = {
   Food: '--chart-food',
@@ -41,15 +46,43 @@ export function setDashboardCurrency(currency) {
   currentCurrency = currency;
 }
 
+function appendSYPEquivalent(parentElement, usdAmount) {
+  const oldEquivalent = parentElement.parentNode.querySelector('.syp-equivalent');
+  if (oldEquivalent) {
+    oldEquivalent.remove();
+  }
+
+  if (currentCurrency === 'USD' && currentExchangeRate > 0) {
+    const sypValue = usdAmount * currentExchangeRate;
+    const formatted = formatCurrency(sypValue, 'SYP');
+    const el = document.createElement('div');
+    el.className = 'syp-equivalent text-xs text-secondary mt-1';
+    el.style.fontSize = 'var(--text-xs)';
+    el.style.color = 'var(--color-text-secondary)';
+    el.style.marginTop = 'var(--space-1)';
+    el.textContent = `≈ ${formatted}`;
+    parentElement.parentNode.insertBefore(el, parentElement.nextSibling);
+  }
+}
+
 function renderDashboardSummary(stats) {
   const balanceEl = document.getElementById('stat-balance');
   const incomeEl = document.getElementById('stat-income');
   const expensesEl = document.getElementById('stat-expenses');
   const countEl = document.getElementById('stat-count');
 
-  if (balanceEl) balanceEl.textContent = formatCurrency(stats.balance, currentCurrency);
-  if (incomeEl) incomeEl.textContent = formatCurrency(stats.totalIncome, currentCurrency);
-  if (expensesEl) expensesEl.textContent = formatCurrency(stats.totalExpenses, currentCurrency);
+  if (balanceEl) {
+    balanceEl.textContent = formatCurrency(stats.balance, currentCurrency);
+    appendSYPEquivalent(balanceEl, stats.balance);
+  }
+  if (incomeEl) {
+    incomeEl.textContent = formatCurrency(stats.totalIncome, currentCurrency);
+    appendSYPEquivalent(incomeEl, stats.totalIncome);
+  }
+  if (expensesEl) {
+    expensesEl.textContent = formatCurrency(stats.totalExpenses, currentCurrency);
+    appendSYPEquivalent(expensesEl, stats.totalExpenses);
+  }
   if (countEl) countEl.textContent = String(stats.transactionCount);
 }
 
@@ -135,6 +168,12 @@ function renderRecentTransactions(transactions) {
     const label = tx.type === 'income' ? translate('type_income') : translate('type_expense');
     const categoryText = tx.type === 'expense' ? translateCategory(tx.category) : '—';
 
+    let sypEquivText = '';
+    if (currentCurrency === 'USD' && currentExchangeRate > 0) {
+      const sypValue = tx.amount * currentExchangeRate;
+      sypEquivText = `<span class="syp-equivalent-block text-xs text-secondary d-block mt-1">≈ ${formatCurrency(sypValue, 'SYP')}</span>`;
+    }
+
     return `
       <div class="transaction-row">
         <div class="transaction-row__main">
@@ -144,9 +183,10 @@ function renderRecentTransactions(transactions) {
             <span>${categoryText}</span>
           </div>
         </div>
-        <div class="transaction-row__status">
+        <div class="transaction-row__status" style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center;">
           <span class="type-badge ${typeClass}">${label}</span>
           <span class="amount amount--${tx.type === 'income' ? 'income' : 'expense'}">${formatCurrency(tx.amount, currentCurrency)}</span>
+          ${sypEquivText}
         </div>
       </div>
     `;

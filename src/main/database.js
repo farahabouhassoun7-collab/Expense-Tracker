@@ -102,10 +102,11 @@ function _initSchema(database) {
     // ── settings table (singleton, id always = 1) ─────────────────────────────
     database.exec(`
       CREATE TABLE IF NOT EXISTS settings (
-        id        INTEGER PRIMARY KEY DEFAULT 1,
-        currency  TEXT    NOT NULL DEFAULT 'USD',
-        theme     TEXT    NOT NULL DEFAULT 'Light',
-        language  TEXT    NOT NULL DEFAULT 'en'
+        id              INTEGER PRIMARY KEY DEFAULT 1,
+        currency        TEXT    NOT NULL DEFAULT 'USD',
+        theme           TEXT    NOT NULL DEFAULT 'Light',
+        language        TEXT    NOT NULL DEFAULT 'en',
+        usd_to_syp_rate REAL    NOT NULL DEFAULT 15000
       );
     `);
 
@@ -116,10 +117,17 @@ function _initSchema(database) {
       // Column may already exist
     }
 
+    // Migration: add usd_to_syp_rate column if it doesn't exist in settings
+    try {
+      database.exec("ALTER TABLE settings ADD COLUMN usd_to_syp_rate REAL NOT NULL DEFAULT 15000;");
+    } catch (err) {
+      // Column may already exist
+    }
+
     // Seed the one-and-only settings row if it does not yet exist
     database.exec(`
-      INSERT OR IGNORE INTO settings (id, currency, theme, language)
-      VALUES (1, 'USD', 'Light', 'en');
+      INSERT OR IGNORE INTO settings (id, currency, theme, language, usd_to_syp_rate)
+      VALUES (1, 'USD', 'Light', 'en', 15000);
     `);
   })();
 }
@@ -233,24 +241,24 @@ function deleteExpense(id) {
 /**
  * Returns the single settings row (id = 1).
  *
- * @returns {{ currency: string, theme: string, language: string }}
+ * @returns {{ currency: string, theme: string, language: string, usd_to_syp_rate: number }}
  */
 function getSettings() {
-  return db.prepare('SELECT currency, theme, language FROM settings WHERE id = 1').get();
+  return db.prepare('SELECT currency, theme, language, usd_to_syp_rate FROM settings WHERE id = 1').get();
 }
 
 /**
  * Updates the single settings row (id = 1).
  * Only the fields provided are updated; all must be supplied together.
  *
- * @param {{ currency: string, theme: string, language: string }} data
+ * @param {{ currency: string, theme: string, language: string, usd_to_syp_rate: number }} data
  * @returns {{ changes: number }}
  */
-function updateSettings({ currency, theme, language }) {
+function updateSettings({ currency, theme, language, usd_to_syp_rate }) {
   const stmt = db.prepare(
-    'UPDATE settings SET currency = ?, theme = ?, language = ? WHERE id = 1'
+    'UPDATE settings SET currency = ?, theme = ?, language = ?, usd_to_syp_rate = ? WHERE id = 1'
   );
-  const result = stmt.run(currency, theme, language);
+  const result = stmt.run(currency, theme, language, usd_to_syp_rate);
   return { changes: result.changes };
 }
 

@@ -6,6 +6,7 @@ const currencySymbols = {
   GBP: '£',
   JPY: '¥',
   INR: '₹',
+  SYP: 'ل.س',
 };
 
 /**

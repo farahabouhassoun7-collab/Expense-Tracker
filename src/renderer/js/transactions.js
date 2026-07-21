@@ -4,9 +4,14 @@ import { formatCurrency } from './theme.js';
 import { translate, translateCategory } from './translations.js';
 
 let currentCurrency = 'USD';
+let currentExchangeRate = 15000;
 let openModal = null;
 let showToast = null;
 let refreshPage = null;
+
+export function setTransactionsExchangeRate(rate) {
+  currentExchangeRate = Number(rate) || 15000;
+}
 let allTransactions = [];
 
 function getSelectedFilters() {
@@ -72,13 +77,22 @@ function renderTransactions(rows) {
     const typeClass = tx.type === 'income' ? 'type-badge--income' : 'type-badge--expense';
     const categoryText = tx.type === 'expense' ? translateCategory(tx.category) : '';
 
+    let sypEquivText = '';
+    if (currentCurrency === 'USD' && currentExchangeRate > 0) {
+      const sypValue = tx.amount * currentExchangeRate;
+      sypEquivText = `<span class="syp-equivalent-block text-xs text-secondary d-block mt-1" style="font-size: var(--text-xs); color: var(--color-text-secondary); margin-top: var(--space-1); font-weight: normal;">≈ ${formatCurrency(sypValue, 'SYP')}</span>`;
+    }
+
     return `
       <tr>
         <td>${tx.date}</td>
         <td><span class="type-badge ${typeClass}">${typeLabel}</span></td>
         <td>${tx.title}</td>
         <td>${categoryText}</td>
-        <td>${formatCurrency(tx.amount, currentCurrency)}</td>
+        <td class="col-amount" style="text-align: inherit; vertical-align: middle;">
+          <span>${formatCurrency(tx.amount, currentCurrency)}</span>
+          ${sypEquivText}
+        </td>
         <td>
           <button class="btn btn-ghost" data-action="edit" data-id="${tx.id}" data-type="${tx.type}">${translate('btn_edit')}</button>
           <button class="btn btn-ghost" data-action="delete" data-id="${tx.id}" data-type="${tx.type}">${translate('btn_delete')}</button>
