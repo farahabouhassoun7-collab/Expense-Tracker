@@ -1,6 +1,7 @@
 'use strict';
 
 import { formatCurrency } from './theme.js';
+import { translate, translateCategory } from './translations.js';
 
 let categoryChart = null;
 let monthlyChart = null;
@@ -59,7 +60,7 @@ function renderCategoryChart(data) {
   canvas.classList.remove('hidden');
   emptyState.classList.add('hidden');
 
-  const labels = data.map((row) => row.category);
+  const labels = data.map((row) => translateCategory(row.category));
   const values = data.map((row) => row.total);
   const backgroundColor = data.map((row) => getCategoryColor(row.category));
 
@@ -115,7 +116,7 @@ function renderMonthlyChart(data) {
     data: {
       labels,
       datasets: [{
-        label: 'Expenses',
+        label: translate('type_expense'),
         data: values,
         backgroundColor: '#5C6BC0',
         borderRadius: 8,
@@ -156,7 +157,7 @@ export async function loadStatistics() {
   const statsResult = await window.api.getStatistics();
 
   if (!statsResult.success) {
-    if (showToast) showToast('Failed to load statistics.', 'error');
+    if (showToast) showToast(translate('msg_settings_load_error'), 'error');
     return;
   }
 

@@ -6,6 +6,7 @@ import { initStatistics, setStatisticsCurrency, loadStatistics } from './statist
 import { initSettings, loadSettings } from './settings.js';
 import { validateForm } from './form-validator.js';
 import { applyTheme } from './theme.js';
+import { applyLanguage, translate } from './translations.js';
 
 // ──────────────────────────────────────────────────────────────────────────
 // GLOBAL STATE & REFERENCES
@@ -86,12 +87,12 @@ async function showPage(pageId) {
   // 4. Update page title
   if (pageTitle) {
     const titles = {
-      dashboard: 'Dashboard',
-      transactions: 'Transactions',
-      statistics: 'Statistics',
-      settings: 'Settings',
+      dashboard: translate('nav_dashboard'),
+      transactions: translate('nav_transactions'),
+      statistics: translate('nav_statistics'),
+      settings: translate('nav_settings'),
     };
-    pageTitle.textContent = titles[pageId] || 'Personal Expense Tracker';
+    pageTitle.textContent = titles[pageId] || translate('nav_dashboard');
   }
 
   // 5. Update global state
@@ -172,8 +173,11 @@ function openModal(type, data = null) {
   const titleEl = document.getElementById('modal-title');
   if (titleEl) {
     const isEdit = !!data;
-    titleEl.textContent = isEdit ? `Edit ${type === 'income' ? 'Income' : 'Expense'}` :
-                                   `Add ${type === 'income' ? 'Income' : 'Expense'}`;
+    if (isEdit) {
+      titleEl.textContent = type === 'income' ? translate('modal_title_edit_income') : translate('modal_title_edit_expense');
+    } else {
+      titleEl.textContent = type === 'income' ? translate('modal_title_add_income') : translate('modal_title_add_expense');
+    }
   }
 
   // Show/hide category field based on type
@@ -388,7 +392,14 @@ function setupModal() {
         // Display inline errors
         for (const [field, message] of Object.entries(validation.errors)) {
           const errorEl = document.getElementById(`error-${field}`);
-          if (errorEl) errorEl.textContent = message;
+          if (errorEl) {
+            let translatedMsg = message;
+            if (field === 'title') translatedMsg = translate('msg_invalid_title');
+            else if (field === 'amount') translatedMsg = translate('msg_invalid_amount');
+            else if (field === 'category') translatedMsg = translate('msg_invalid_category');
+            else if (field === 'date') translatedMsg = translate('msg_invalid_date');
+            errorEl.textContent = translatedMsg;
+          }
         }
         return;
       }
@@ -424,14 +435,14 @@ function setupModal() {
       if (response && response.success) {
         showToast(
           id !== null
-            ? `${type === 'income' ? 'Income' : 'Expense'} updated successfully.`
-            : `${type === 'income' ? 'Income' : 'Expense'} added successfully.`,
+            ? translate('msg_edit_success')
+            : translate('msg_add_success'),
           'success'
         );
         closeModal();
         await refreshActivePage();
       } else {
-        const errorMsg = response ? response.error : 'An unexpected error occurred';
+        const errorMsg = response ? response.error : translate('msg_unknown');
         showToast(errorMsg, 'error');
       }
     });
@@ -497,6 +508,7 @@ async function initApp() {
         setTransactionsCurrency(settings.currency);
         setStatisticsCurrency(settings.currency);
         applyTheme(settings.theme);
+        applyLanguage(settings.language || 'en');
       }
     }
   } catch (err) {

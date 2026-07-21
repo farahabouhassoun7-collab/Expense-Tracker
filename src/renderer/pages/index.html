@@ -44,7 +44,7 @@
 
       <!-- Dashboard -->
       <button class="nav-item active" id="nav-dashboard"
-              aria-current="page" data-page="dashboard">
+              aria-current="page" data-page="dashboard" data-i18n="nav_dashboard">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
              viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
@@ -58,7 +58,7 @@
       </button>
 
       <!-- Transactions -->
-      <button class="nav-item" id="nav-transactions" data-page="transactions">
+      <button class="nav-item" id="nav-transactions" data-page="transactions" data-i18n="nav_transactions">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
              viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
@@ -70,7 +70,7 @@
       </button>
 
       <!-- Statistics -->
-      <button class="nav-item" id="nav-statistics" data-page="statistics">
+      <button class="nav-item" id="nav-statistics" data-page="statistics" data-i18n="nav_statistics">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
              viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
@@ -83,7 +83,7 @@
       </button>
 
       <!-- Settings -->
-      <button class="nav-item" id="nav-settings" data-page="settings">
+      <button class="nav-item" id="nav-settings" data-page="settings" data-i18n="nav_settings">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
              viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
@@ -102,7 +102,7 @@
     <!-- Sidebar footer: theme toggle + version -->
     <div class="sidebar-footer">
       <div class="theme-toggle" role="group" aria-label="Theme selection">
-        <button class="theme-toggle__btn active" id="theme-light" aria-pressed="true">
+        <button class="theme-toggle__btn active" id="theme-light" aria-pressed="true" data-i18n="theme_light">
           <!-- Sun icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -113,7 +113,7 @@
           </svg>
           Light
         </button>
-        <button class="theme-toggle__btn" id="theme-dark" aria-pressed="false">
+        <button class="theme-toggle__btn" id="theme-dark" aria-pressed="false" data-i18n="theme_dark">
           <!-- Moon icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -124,7 +124,7 @@
           Dark
         </button>
       </div>
-      <span class="sidebar-version">v1.0.0</span>
+      <span class="sidebar-version" data-i18n="app_version">v1.0.0</span>
     </div>
 
   </aside><!-- /sidebar -->
@@ -138,7 +138,7 @@
     <header class="app-header" id="app-header">
       <h1 class="page-title" id="page-title">Dashboard</h1>
       <div class="header-actions">
-        <button class="btn btn-secondary" id="btn-add-income">
+        <button class="btn btn-secondary" id="btn-add-income" data-i18n="btn_add_income">
           <!-- Plus-circle icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -149,7 +149,7 @@
           </svg>
           Add Income
         </button>
-        <button class="btn btn-primary" id="btn-add-expense">
+        <button class="btn btn-primary" id="btn-add-expense" data-i18n="btn_add_expense">
           <!-- Minus-circle icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -187,7 +187,7 @@
                 <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
                 <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
               </svg>
-              <span class="summary-card__label">Balance</span>
+              <span class="summary-card__label" data-i18n="card_balance_label">Balance</span>
             </div>
             <div class="summary-card__value summary-card__value--balance"
                  id="stat-balance" aria-label="Current balance">$0.00</div>
@@ -204,7 +204,7 @@
                 <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
                 <polyline points="16 7 22 7 22 13"/>
               </svg>
-              <span class="summary-card__label">Total Income</span>
+              <span class="summary-card__label" data-i18n="card_income_label">Total Income</span>
             </div>
             <div class="summary-card__value summary-card__value--income"
                  id="stat-income" aria-label="Total income">$0.00</div>
@@ -221,7 +221,7 @@
                 <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
                 <polyline points="16 17 22 17 22 11"/>
               </svg>
-              <span class="summary-card__label">Total Expenses</span>
+              <span class="summary-card__label" data-i18n="card_expenses_label">Total Expenses</span>
             </div>
             <div class="summary-card__value summary-card__value--expense"
                  id="stat-expenses" aria-label="Total expenses">$0.00</div>
@@ -239,12 +239,12 @@
                 <path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.67 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/>
                 <path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.67 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/>
               </svg>
-              <span class="summary-card__label">Transactions</span>
+              <span class="summary-card__label" data-i18n="card_transactions_label">Transactions</span>
             </div>
             <div class="summary-card__value summary-card__value--count"
                  id="stat-count" aria-label="Total transactions">0</div>
             <div class="summary-card__trend" id="stat-count-sub"
-                 style="font-size:var(--text-xs);color:var(--color-text-secondary);">all time</div>
+                 style="font-size:var(--text-xs);color:var(--color-text-secondary);" data-i18n="card_count_sub">all time</div>
           </div>
 
         </div><!-- /summary-grid -->
@@ -255,7 +255,7 @@
           <!-- Doughnut chart card -->
           <div class="card chart-card" id="dashboard-chart-card">
             <div class="card-header">
-              <h2 class="card-title">Spending by Category</h2>
+              <h2 class="card-title" data-i18n="chart_spending_category">Spending by Category</h2>
             </div>
             <!-- Chart canvas -->
             <div class="chart-doughnut-wrapper" id="dashboard-chart-wrapper">
@@ -272,16 +272,16 @@
                 <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
                 <path d="M22 12A10 10 0 0 0 12 2v10z"/>
               </svg>
-              <p class="chart-empty__text">No expense data yet.<br>Add expenses to see your spending breakdown.</p>
+              <p class="chart-empty__text" data-i18n="chart_empty_expense">No expense data yet.<br>Add expenses to see your spending breakdown.</p>
             </div>
           </div>
 
           <!-- Recent transactions card -->
           <div class="card" id="recent-transactions-card">
             <div class="card-header">
-              <h2 class="card-title">Recent Transactions</h2>
+              <h2 class="card-title" data-i18n="recent_transactions_title">Recent Transactions</h2>
               <button class="card-action-link" id="btn-view-all"
-                      aria-label="View all transactions">View all →</button>
+                      aria-label="View all transactions" data-i18n="btn_view_all">View all →</button>
             </div>
             <!-- Transaction rows injected by dashboard.js -->
             <div class="transaction-list" id="recent-transactions-list"></div>
@@ -292,8 +292,8 @@
                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m17 11-5-5-5 5"/><path d="m17 18-5-5-5 5"/>
               </svg>
-              <p class="empty-state__heading">No transactions yet</p>
-              <p class="empty-state__body">Add your first income or expense to get started.</p>
+              <p class="empty-state__heading" data-i18n="recent_empty_heading">No transactions yet</p>
+              <p class="empty-state__body" data-i18n="recent_empty_body">Add your first income or expense to get started.</p>
             </div>
           </div>
 
@@ -317,7 +317,7 @@
             </svg>
             <input class="input input--search" id="search-transactions"
                    type="search" placeholder="Search transactions..."
-                   aria-label="Search transactions" autocomplete="off">
+                   aria-label="Search transactions" autocomplete="off" data-i18n-placeholder="search_placeholder">
             <button class="search-wrapper__clear" id="search-clear" aria-label="Clear search">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                    fill="none" stroke="currentColor" stroke-linecap="round"
@@ -328,14 +328,14 @@
           </div>
 
           <select class="input input--select" id="filter-category">
-            <option value="">All Categories</option>
-            <option value="Food">Food</option>
-            <option value="Transport">Transport</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Bills">Bills</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Healthcare">Healthcare</option>
-            <option value="Other">Other</option>
+            <option value="" data-i18n="filter_all_categories">All Categories</option>
+            <option value="Food" data-i18n="cat_food">Food</option>
+            <option value="Transport" data-i18n="cat_transport">Transport</option>
+            <option value="Shopping" data-i18n="cat_shopping">Shopping</option>
+            <option value="Bills" data-i18n="cat_bills">Bills</option>
+            <option value="Entertainment" data-i18n="cat_entertainment">Entertainment</option>
+            <option value="Healthcare" data-i18n="cat_healthcare">Healthcare</option>
+            <option value="Other" data-i18n="cat_other">Other</option>
           </select>
 
           <input class="input input--date" id="filter-date-from" type="date"
@@ -345,7 +345,7 @@
 
           <div class="table-filters__spacer"></div>
 
-          <button class="btn btn-ghost" id="btn-export-csv" aria-label="Export to CSV">
+          <button class="btn btn-ghost" id="btn-export-csv" aria-label="Export to CSV" data-i18n="btn_export_csv">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -363,12 +363,12 @@
           <table class="data-table" id="transactions-table" aria-label="Transactions list">
             <thead>
               <tr>
-                <th class="col-date">Date</th>
-                <th class="col-type">Type</th>
-                <th class="col-title">Title</th>
-                <th class="col-category">Category</th>
-                <th class="col-amount">Amount</th>
-                <th class="col-actions">Actions</th>
+                <th class="col-date" data-i18n="table_th_date">Date</th>
+                <th class="col-type" data-i18n="table_th_type">Type</th>
+                <th class="col-title" data-i18n="table_th_title">Title</th>
+                <th class="col-category" data-i18n="table_th_category">Category</th>
+                <th class="col-amount" data-i18n="table_th_amount">Amount</th>
+                <th class="col-actions" data-i18n="table_th_actions">Actions</th>
               </tr>
             </thead>
             <tbody id="transactions-tbody">
@@ -383,8 +383,8 @@
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="m17 11-5-5-5 5"/><path d="m17 18-5-5-5 5"/>
             </svg>
-            <p class="empty-state__heading">No transactions yet</p>
-            <p class="empty-state__body">Add your first income or expense to get started.</p>
+            <p class="empty-state__heading" data-i18n="transactions_empty_heading">No transactions yet</p>
+            <p class="empty-state__body" data-i18n="transactions_empty_body">Add your first income or expense to get started.</p>
           </div>
         </div>
 
@@ -397,6 +397,7 @@
                role="main" aria-label="Statistics" hidden>
 
         <!-- Three summary cards -->
+        <!-- Three summary cards -->
         <div class="stat-grid">
           <div class="card stat-card" id="stat-card-income">
             <div class="stat-card__meta">
@@ -407,7 +408,7 @@
                 <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
                 <polyline points="16 7 22 7 22 13"/>
               </svg>
-              <span class="stat-card__label">Total Income</span>
+              <span class="stat-card__label" data-i18n="stats_total_income">Total Income</span>
             </div>
             <div class="stat-card__value stat-card__value--income"
                  id="stats-total-income" aria-label="Total income">$0.00</div>
@@ -422,7 +423,7 @@
                 <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
                 <polyline points="16 17 22 17 22 11"/>
               </svg>
-              <span class="stat-card__label">Total Expenses</span>
+              <span class="stat-card__label" data-i18n="stats_total_expenses">Total Expenses</span>
             </div>
             <div class="stat-card__value stat-card__value--expense"
                  id="stats-total-expenses" aria-label="Total expenses">$0.00</div>
@@ -438,7 +439,7 @@
                 <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
                 <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
               </svg>
-              <span class="stat-card__label">Balance</span>
+              <span class="stat-card__label" data-i18n="stats_balance">Balance</span>
             </div>
             <div class="stat-card__value stat-card__value--balance"
                  id="stats-balance" aria-label="Current balance">$0.00</div>
@@ -451,7 +452,7 @@
           <!-- Pie chart -->
           <div class="card chart-card" id="statistics-chart-card">
             <div class="card-header">
-              <h2 class="card-title">Spending by Category</h2>
+              <h2 class="card-title" data-i18n="chart_spending_by_category">Spending by Category</h2>
             </div>
             <div class="chart-doughnut-wrapper" id="statistics-chart-wrapper">
               <canvas id="statisticsChart" aria-label="Spending by category chart"
@@ -465,14 +466,14 @@
                 <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
                 <path d="M22 12A10 10 0 0 0 12 2v10z"/>
               </svg>
-              <p class="chart-empty__text">No expense data yet.</p>
+              <p class="chart-empty__text" data-i18n="stats_empty_category">No expense data yet.</p>
             </div>
           </div>
 
           <!-- Bar chart -->
           <div class="card chart-card" id="monthly-chart-card">
             <div class="card-header">
-              <h2 class="card-title">Monthly Expenses</h2>
+              <h2 class="card-title" data-i18n="chart_monthly_expenses">Monthly Expenses</h2>
             </div>
             <div class="chart-bar-wrapper" id="monthly-chart-wrapper">
               <canvas id="monthlyChart" aria-label="Monthly expenses bar chart"
@@ -486,7 +487,7 @@
                 <line x1="12" x2="12" y1="20" y2="4"/>
                 <line x1="6"  x2="6"  y1="20" y2="14"/>
               </svg>
-              <p class="chart-empty__text">No expense data yet.</p>
+              <p class="chart-empty__text" data-i18n="stats_empty_monthly">No expense data yet.</p>
             </div>
           </div>
 
@@ -503,13 +504,13 @@
         <!-- Settings card -->
         <div class="card settings-card">
           <div class="card-header">
-            <h2 class="card-title">General Settings</h2>
+            <h2 class="card-title" data-i18n="settings_general_title">General Settings</h2>
           </div>
 
           <div class="settings-form">
             <!-- Currency -->
             <div class="form-group">
-              <label for="currency-select" class="form-label">Currency</label>
+              <label for="currency-select" class="form-label" data-i18n="settings_currency_label">Currency</label>
               <select class="input input--select" id="currency-select"
                       aria-label="Select currency">
                 <option value="USD">US Dollar (USD)</option>
@@ -520,11 +521,21 @@
               </select>
             </div>
 
+            <!-- Language -->
+            <div class="form-group">
+              <label for="language-select" class="form-label" data-i18n="settings_language_label">Language</label>
+              <select class="input input--select" id="language-select"
+                      aria-label="Select language">
+                <option value="en">English (English)</option>
+                <option value="ar">العربية (Arabic)</option>
+              </select>
+            </div>
+
             <!-- Theme -->
             <div class="form-group">
-              <label class="form-label">Theme</label>
+              <label class="form-label" data-i18n="settings_theme_label">Theme</label>
               <div class="theme-toggle theme-toggle--settings" role="group" aria-label="Theme selection">
-                <button class="theme-toggle__btn active" id="settings-theme-light" aria-pressed="true">
+                <button class="theme-toggle__btn active" id="settings-theme-light" aria-pressed="true" data-i18n="theme_light">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -534,7 +545,7 @@
                   </svg>
                   Light
                 </button>
-                <button class="theme-toggle__btn" id="settings-theme-dark" aria-pressed="false">
+                <button class="theme-toggle__btn" id="settings-theme-dark" aria-pressed="false" data-i18n="theme_dark">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -548,9 +559,9 @@
 
             <!-- Export CSV -->
             <div class="form-group form-group--export">
-              <label class="form-label">Export Data</label>
-              <p class="form-hint">Export all transactions as a CSV file for backup or analysis.</p>
-              <button class="btn btn-ghost" id="btn-export-settings" aria-label="Export to CSV">
+              <label class="form-label" data-i18n="settings_export_label">Export Data</label>
+              <p class="form-hint" data-i18n="settings_export_hint">Export all transactions as a CSV file for backup or analysis.</p>
+              <button class="btn btn-ghost" id="btn-export-settings" aria-label="Export to CSV" data-i18n="btn_export_csv">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                      viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -569,19 +580,19 @@
         <!-- Database info card -->
         <div class="card info-card">
           <div class="card-header">
-            <h2 class="card-title">About</h2>
+            <h2 class="card-title" data-i18n="settings_about_title">About</h2>
           </div>
           <div class="info-list">
             <div class="info-item">
-              <span class="info-label">Application Version</span>
-              <span class="info-value" id="app-version">v1.0.0</span>
+              <span class="info-label" data-i18n="settings_app_version_label">Application Version</span>
+              <span class="info-value" id="app-version" data-i18n="app_version">v1.0.0</span>
             </div>
             <div class="info-item">
-              <span class="info-label">Database Location</span>
+              <span class="info-label" data-i18n="settings_db_location_label">Database Location</span>
               <span class="info-value" id="db-location">Loading...</span>
             </div>
             <div class="info-item">
-              <span class="info-label">Total Transactions</span>
+              <span class="info-label" data-i18n="settings_total_transactions_label">Total Transactions</span>
               <span class="info-value" id="db-transaction-count">0</span>
             </div>
           </div>
@@ -613,44 +624,44 @@
 
             <!-- Title -->
             <div class="form-group">
-              <label for="modal-title-input" class="form-label">Title *</label>
+              <label for="modal-title-input" class="form-label" data-i18n="modal_label_title">Title *</label>
               <input type="text" class="input" id="modal-title-input"
                      name="title" placeholder="Salary, Groceries, etc."
-                     autocomplete="off" required>
+                     autocomplete="off" required data-i18n-placeholder="modal_placeholder_title">
               <span class="form-error" id="error-title" aria-live="polite"></span>
             </div>
 
             <!-- Amount -->
             <div class="form-group">
-              <label for="modal-amount-input" class="form-label">Amount *</label>
+              <label for="modal-amount-input" class="form-label" data-i18n="modal_label_amount">Amount *</label>
               <div class="input-wrapper">
                 <span class="input-prefix" id="modal-amount-prefix">$</span>
                 <input type="number" class="input input--amount" id="modal-amount-input"
                        name="amount" placeholder="0.00" step="0.01" min="0.01"
-                       autocomplete="off" required>
+                       autocomplete="off" required data-i18n-placeholder="modal_placeholder_amount">
               </div>
               <span class="form-error" id="error-amount" aria-live="polite"></span>
             </div>
 
             <!-- Category (only for expenses) -->
             <div class="form-group hidden" id="modal-category-group">
-              <label for="modal-category-select" class="form-label">Category *</label>
+              <label for="modal-category-select" class="form-label" data-i18n="modal_label_category">Category *</label>
               <select class="input input--select" id="modal-category-select" name="category">
-                <option value="">Select category</option>
-                <option value="Food">Food</option>
-                <option value="Transport">Transport</option>
-                <option value="Shopping">Shopping</option>
-                <option value="Bills">Bills</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Other">Other</option>
+                <option value="" data-i18n="modal_placeholder_category">Select category</option>
+                <option value="Food" data-i18n="cat_food">Food</option>
+                <option value="Transport" data-i18n="cat_transport">Transport</option>
+                <option value="Shopping" data-i18n="cat_shopping">Shopping</option>
+                <option value="Bills" data-i18n="cat_bills">Bills</option>
+                <option value="Entertainment" data-i18n="cat_entertainment">Entertainment</option>
+                <option value="Healthcare" data-i18n="cat_healthcare">Healthcare</option>
+                <option value="Other" data-i18n="cat_other">Other</option>
               </select>
               <span class="form-error" id="error-category" aria-live="polite"></span>
             </div>
 
             <!-- Date -->
             <div class="form-group">
-              <label for="modal-date-input" class="form-label">Date *</label>
+              <label for="modal-date-input" class="form-label" data-i18n="modal_label_date">Date *</label>
               <input type="date" class="input input--date" id="modal-date-input"
                      name="date" required>
               <span class="form-error" id="error-date" aria-live="polite"></span>
@@ -658,17 +669,17 @@
 
             <!-- Note -->
             <div class="form-group">
-              <label for="modal-note-textarea" class="form-label">Note</label>
+              <label for="modal-note-textarea" class="form-label" data-i18n="modal_label_note">Note</label>
               <textarea class="input input--textarea" id="modal-note-textarea"
-                        name="note" placeholder="Optional note..." rows="3"></textarea>
+                        name="note" placeholder="Optional note..." rows="3" data-i18n-placeholder="modal_placeholder_note"></textarea>
             </div>
 
             <!-- Form actions -->
             <div class="modal-actions">
-              <button type="button" class="btn btn-ghost" id="modal-cancel">
+              <button type="button" class="btn btn-ghost" id="modal-cancel" data-i18n="modal_cancel">
                 Cancel
               </button>
-              <button type="submit" class="btn btn-primary" id="modal-save">
+              <button type="submit" class="btn btn-primary" id="modal-save" data-i18n="modal_save">
                 Save
               </button>
             </div>

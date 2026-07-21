@@ -1,6 +1,7 @@
 'use strict';
 
 import { formatCurrency } from './theme.js';
+import { translate, translateCategory } from './translations.js';
 
 let currentCurrency = 'USD';
 let openModal = null;
@@ -67,9 +68,9 @@ function renderTransactions(rows) {
   table.classList.remove('hidden');
 
   tbody.innerHTML = rows.map((tx) => {
-    const typeLabel = tx.type === 'income' ? 'Income' : 'Expense';
+    const typeLabel = tx.type === 'income' ? translate('type_income') : translate('type_expense');
     const typeClass = tx.type === 'income' ? 'type-badge--income' : 'type-badge--expense';
-    const categoryText = tx.type === 'expense' ? tx.category : '';
+    const categoryText = tx.type === 'expense' ? translateCategory(tx.category) : '';
 
     return `
       <tr>
@@ -79,8 +80,8 @@ function renderTransactions(rows) {
         <td>${categoryText}</td>
         <td>${formatCurrency(tx.amount, currentCurrency)}</td>
         <td>
-          <button class="btn btn-ghost" data-action="edit" data-id="${tx.id}" data-type="${tx.type}">Edit</button>
-          <button class="btn btn-ghost" data-action="delete" data-id="${tx.id}" data-type="${tx.type}">Delete</button>
+          <button class="btn btn-ghost" data-action="edit" data-id="${tx.id}" data-type="${tx.type}">${translate('btn_edit')}</button>
+          <button class="btn btn-ghost" data-action="delete" data-id="${tx.id}" data-type="${tx.type}">${translate('btn_delete')}</button>
         </td>
       </tr>
     `;
@@ -130,11 +131,11 @@ export function initTransactions({ openModal: modalFn, showToast: notify, refres
     exportButton.addEventListener('click', async () => {
       const result = await window.api.exportToCSV();
       if (result.success) {
-        if (showToast) showToast('Export successful.', 'success');
+        if (showToast) showToast(translate('msg_export_success'), 'success');
       } else if (result.cancelled) {
         // User cancelled export, no toast needed.
       } else {
-        if (showToast) showToast(`Export failed: ${result.error}`, 'error');
+        if (showToast) showToast(`${translate('msg_export_failed')}: ${result.error}`, 'error');
       }
     });
   }
@@ -158,7 +159,7 @@ export function initTransactions({ openModal: modalFn, showToast: notify, refres
       }
 
       if (action === 'delete') {
-        const confirmed = window.confirm('Delete this transaction? This cannot be undone.');
+        const confirmed = window.confirm(translate('msg_confirm_delete'));
         if (!confirmed) return;
 
         let response;
@@ -169,11 +170,11 @@ export function initTransactions({ openModal: modalFn, showToast: notify, refres
         }
 
         if (!response.success) {
-          if (showToast) showToast(`Delete failed: ${response.error}`, 'error');
+          if (showToast) showToast(`${translate('msg_delete_failed')}: ${response.error}`, 'error');
           return;
         }
 
-        if (showToast) showToast('Transaction deleted.', 'success');
+        if (showToast) showToast(translate('msg_delete_success'), 'success');
         await loadTransactions();
         if (refreshPage) refreshPage();
       }
@@ -188,12 +189,12 @@ export async function loadTransactions() {
   ]);
 
   if (!incomeResult.success) {
-    if (showToast) showToast('Failed to load incomes.', 'error');
+    if (showToast) showToast(translate('msg_settings_load_error'), 'error');
     return;
   }
 
   if (!expenseResult.success) {
-    if (showToast) showToast('Failed to load expenses.', 'error');
+    if (showToast) showToast(translate('msg_settings_load_error'), 'error');
     return;
   }
 

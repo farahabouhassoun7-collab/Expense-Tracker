@@ -1,6 +1,7 @@
 'use strict';
 
 import { formatCurrency } from './theme.js';
+import { translate, translateCategory } from './translations.js';
 
 let currentCurrency = 'USD';
 let navigateTo = null;
@@ -97,7 +98,7 @@ function renderDashboardChart(expensesByCategory) {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: (context) => `${context.label}: ${formatCurrency(context.parsed, currentCurrency)}`,
+            label: (context) => `${translateCategory(context.label)}: ${formatCurrency(context.parsed, currentCurrency)}`,
           },
         },
       },
@@ -109,7 +110,7 @@ function renderDashboardChart(expensesByCategory) {
     return `
       <div class="chart-legend__item">
         <span class="chart-legend__dot" style="background:${color}"></span>
-        <span class="chart-legend__label">${row.category}</span>
+        <span class="chart-legend__label">${translateCategory(row.category)}</span>
         <span class="chart-legend__value">${formatCurrency(row.total, currentCurrency)}</span>
       </div>
     `;
@@ -131,8 +132,8 @@ function renderRecentTransactions(transactions) {
   emptyState.classList.add('hidden');
   listEl.innerHTML = transactions.map((tx) => {
     const typeClass = tx.type === 'income' ? 'type-badge--income' : 'type-badge--expense';
-    const label = tx.type === 'income' ? 'Income' : 'Expense';
-    const categoryText = tx.type === 'expense' ? tx.category : '—';
+    const label = tx.type === 'income' ? translate('type_income') : translate('type_expense');
+    const categoryText = tx.type === 'expense' ? translateCategory(tx.category) : '—';
 
     return `
       <div class="transaction-row">
@@ -155,13 +156,13 @@ function renderRecentTransactions(transactions) {
 export async function loadDashboard() {
   const statsResult = await window.api.getStatistics();
   if (!statsResult.success) {
-    if (showToast) showToast('Failed to load dashboard statistics.', 'error');
+    if (showToast) showToast(translate('msg_settings_load_error'), 'error');
     return;
   }
 
   const recentResult = await window.api.getRecentTransactions();
   if (!recentResult.success) {
-    if (showToast) showToast('Failed to load recent transactions.', 'error');
+    if (showToast) showToast(translate('msg_settings_load_error'), 'error');
     return;
   }
 

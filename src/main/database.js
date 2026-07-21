@@ -104,15 +104,23 @@ function _initSchema(database) {
       CREATE TABLE IF NOT EXISTS settings (
         id        INTEGER PRIMARY KEY DEFAULT 1,
         currency  TEXT    NOT NULL DEFAULT 'USD',
-        theme     TEXT    NOT NULL DEFAULT 'Light'
+        theme     TEXT    NOT NULL DEFAULT 'Light',
+        language  TEXT    NOT NULL DEFAULT 'en'
       );
     `);
 
     // Seed the one-and-only settings row if it does not yet exist
     database.exec(`
-      INSERT OR IGNORE INTO settings (id, currency, theme)
-      VALUES (1, 'USD', 'Light');
+      INSERT OR IGNORE INTO settings (id, currency, theme, language)
+      VALUES (1, 'USD', 'Light', 'en');
     `);
+
+    // Migration: add language column if it doesn't exist in settings
+    try {
+      database.exec("ALTER TABLE settings ADD COLUMN language TEXT NOT NULL DEFAULT 'en';");
+    } catch (err) {
+      // Column may already exist
+    }
   })();
 }
 
@@ -225,24 +233,24 @@ function deleteExpense(id) {
 /**
  * Returns the single settings row (id = 1).
  *
- * @returns {{ currency: string, theme: string }}
+ * @returns {{ currency: string, theme: string, language: string }}
  */
 function getSettings() {
-  return db.prepare('SELECT currency, theme FROM settings WHERE id = 1').get();
+  return db.prepare('SELECT currency, theme, language FROM settings WHERE id = 1').get();
 }
 
 /**
  * Updates the single settings row (id = 1).
- * Only the fields provided are updated; both must be supplied together.
+ * Only the fields provided are updated; all must be supplied together.
  *
- * @param {{ currency: string, theme: string }} data
+ * @param {{ currency: string, theme: string, language: string }} data
  * @returns {{ changes: number }}
  */
-function updateSettings({ currency, theme }) {
+function updateSettings({ currency, theme, language }) {
   const stmt = db.prepare(
-    'UPDATE settings SET currency = ?, theme = ? WHERE id = 1'
+    'UPDATE settings SET currency = ?, theme = ?, language = ? WHERE id = 1'
   );
-  const result = stmt.run(currency, theme);
+  const result = stmt.run(currency, theme, language);
   return { changes: result.changes };
 }
 

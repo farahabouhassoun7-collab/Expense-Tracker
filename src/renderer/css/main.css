@@ -602,3 +602,80 @@ html {
     background-color var(--duration-fast) var(--ease-default),
     color            var(--duration-fast) var(--ease-default);
 }
+
+/* ==========================================================================
+   14. RIGHT-TO-LEFT (RTL) LAYOUT SUPPORT (Arabic Bilingual)
+   ========================================================================== */
+
+html[dir="rtl"] {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar branding layout direction */
+html[dir="rtl"] .sidebar-brand {
+  flex-direction: row;
+}
+
+/* Reverse search input inset icon positioning and paddings */
+html[dir="rtl"] .search-wrapper__icon {
+  left: auto;
+  right: var(--space-3);
+}
+
+html[dir="rtl"] .input--search {
+  padding-left: var(--space-8);
+  padding-right: 36px;
+}
+
+html[dir="rtl"] .search-wrapper__clear {
+  right: auto;
+  left: var(--space-2);
+}
+
+/* Table header and value alignment adjustments */
+html[dir="rtl"] .data-table thead th {
+  text-align: right;
+}
+
+html[dir="rtl"] .col-amount {
+  text-align: left;
+}
+
+/* Select element chevron icon alignment */
+html[dir="rtl"] .input--select {
+  background-position: left var(--space-3) center;
+  padding-left: var(--space-8);
+  padding-right: var(--space-3);
+}
+
+/* Toast layout adjustments in RTL */
+html[dir="rtl"] .toast-container {
+  right: auto;
+  left: var(--space-6);
+}
+
+html[dir="rtl"] .toast {
+  border-left: none;
+}
+
+html[dir="rtl"] .toast--success {
+  border-right: 3px solid var(--color-success);
+}
+
+html[dir="rtl"] .toast--error {
+  border-right: 3px solid var(--color-error);
+}
+
+/* Modal form controls positioning */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+html[dir="rtl"] .modal-actions {
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+}
+
