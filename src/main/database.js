@@ -109,18 +109,18 @@ function _initSchema(database) {
       );
     `);
 
-    // Seed the one-and-only settings row if it does not yet exist
-    database.exec(`
-      INSERT OR IGNORE INTO settings (id, currency, theme, language)
-      VALUES (1, 'USD', 'Light', 'en');
-    `);
-
     // Migration: add language column if it doesn't exist in settings
     try {
       database.exec("ALTER TABLE settings ADD COLUMN language TEXT NOT NULL DEFAULT 'en';");
     } catch (err) {
       // Column may already exist
     }
+
+    // Seed the one-and-only settings row if it does not yet exist
+    database.exec(`
+      INSERT OR IGNORE INTO settings (id, currency, theme, language)
+      VALUES (1, 'USD', 'Light', 'en');
+    `);
   })();
 }
 
