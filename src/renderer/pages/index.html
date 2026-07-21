@@ -661,6 +661,21 @@
               <span class="form-error" id="error-amount" aria-live="polite"></span>
             </div>
 
+            <!-- Currency & Exchange Rate -->
+            <div class="form-row--two-col">
+              <div class="form-group">
+                <label for="modal-currency-select" class="form-label" data-i18n="modal_label_currency">Currency *</label>
+                <select class="input input--select" id="modal-currency-select" name="currency">
+                  <option value="USD">USD ($)</option>
+                  <option value="SYP">SYP (ل.س)</option>
+                </select>
+              </div>
+              <div class="form-group" id="modal-exchange-rate-group">
+                <label for="modal-exchange-rate-input" class="form-label" data-i18n="modal_label_exchange_rate">Exchange Rate (USD➔SYP) *</label>
+                <input type="number" class="input" id="modal-exchange-rate-input" name="exchange_rate" value="15000" min="1" step="100">
+              </div>
+            </div>
+
             <!-- Category (only for expenses) -->
             <div class="form-group hidden" id="modal-category-group">
               <label for="modal-category-select" class="form-label" data-i18n="modal_label_category">Category *</label>

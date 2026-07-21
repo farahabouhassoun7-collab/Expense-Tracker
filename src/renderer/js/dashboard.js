@@ -150,6 +150,39 @@ function renderDashboardChart(expensesByCategory) {
   }).join('');
 }
 
+function formatTransactionAmount(tx, baseCurrency) {
+  const txCurrency = tx.currency || 'USD';
+  const txRate = tx.exchange_rate || 1.0;
+  const amount = tx.amount;
+  const typeClass = tx.type === 'income' ? 'income' : 'expense';
+
+  if (baseCurrency === 'USD') {
+    if (txCurrency === 'USD') {
+      const primary = formatCurrency(amount, 'USD');
+      const sypVal = amount * txRate;
+      const secondary = txRate > 1 ? `<span class="syp-equivalent-block text-xs text-secondary d-block mt-1">≈ ${formatCurrency(sypVal, 'SYP')}</span>` : '';
+      return `<span class="amount amount--${typeClass}">${primary}</span>${secondary}`;
+    } else {
+      const usdVal = amount / txRate;
+      const primary = formatCurrency(usdVal, 'USD');
+      const secondary = `<span class="syp-equivalent-block text-xs text-secondary d-block mt-1">(${formatCurrency(amount, 'SYP')})</span>`;
+      return `<span class="amount amount--${typeClass}">${primary}</span>${secondary}`;
+    }
+  } else if (baseCurrency === 'SYP') {
+    if (txCurrency === 'SYP') {
+      const primary = formatCurrency(amount, 'SYP');
+      return `<span class="amount amount--${typeClass}">${primary}</span>`;
+    } else {
+      const sypVal = amount * txRate;
+      const primary = formatCurrency(sypVal, 'SYP');
+      const secondary = `<span class="syp-equivalent-block text-xs text-secondary d-block mt-1">(${formatCurrency(amount, 'USD')})</span>`;
+      return `<span class="amount amount--${typeClass}">${primary}</span>${secondary}`;
+    }
+  } else {
+    return `<span class="amount amount--${typeClass}">${formatCurrency(amount, baseCurrency)}</span>`;
+  }
+}
+
 function renderRecentTransactions(transactions) {
   const listEl = document.getElementById('recent-transactions-list');
   const emptyState = document.getElementById('recent-transactions-empty');
@@ -168,12 +201,6 @@ function renderRecentTransactions(transactions) {
     const label = tx.type === 'income' ? translate('type_income') : translate('type_expense');
     const categoryText = tx.type === 'expense' ? translateCategory(tx.category) : '—';
 
-    let sypEquivText = '';
-    if (currentCurrency === 'USD' && currentExchangeRate > 0) {
-      const sypValue = tx.amount * currentExchangeRate;
-      sypEquivText = `<span class="syp-equivalent-block text-xs text-secondary d-block mt-1">≈ ${formatCurrency(sypValue, 'SYP')}</span>`;
-    }
-
     return `
       <div class="transaction-row">
         <div class="transaction-row__main">
@@ -185,8 +212,7 @@ function renderRecentTransactions(transactions) {
         </div>
         <div class="transaction-row__status" style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center;">
           <span class="type-badge ${typeClass}">${label}</span>
-          <span class="amount amount--${tx.type === 'income' ? 'income' : 'expense'}">${formatCurrency(tx.amount, currentCurrency)}</span>
-          ${sypEquivText}
+          ${formatTransactionAmount(tx, currentCurrency)}
         </div>
       </div>
     `;

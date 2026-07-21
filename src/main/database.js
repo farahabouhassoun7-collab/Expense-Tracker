@@ -64,11 +64,13 @@ function _initSchema(database) {
     // ── income table ──────────────────────────────────────────────────────────
     database.exec(`
       CREATE TABLE IF NOT EXISTS income (
-        id      INTEGER PRIMARY KEY AUTOINCREMENT,
-        title   TEXT    NOT NULL,
-        amount  REAL    NOT NULL CHECK(amount > 0),
-        date    TEXT    NOT NULL,
-        note    TEXT
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        title         TEXT    NOT NULL,
+        amount        REAL    NOT NULL CHECK(amount > 0),
+        date          TEXT    NOT NULL,
+        note          TEXT,
+        currency      TEXT    NOT NULL DEFAULT 'USD',
+        exchange_rate REAL    NOT NULL DEFAULT 1.0
       );
     `);
 
@@ -80,12 +82,14 @@ function _initSchema(database) {
     // ── expenses table ────────────────────────────────────────────────────────
     database.exec(`
       CREATE TABLE IF NOT EXISTS expenses (
-        id        INTEGER PRIMARY KEY AUTOINCREMENT,
-        title     TEXT    NOT NULL,
-        amount    REAL    NOT NULL CHECK(amount > 0),
-        category  TEXT    NOT NULL,
-        date      TEXT    NOT NULL,
-        note      TEXT
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        title         TEXT    NOT NULL,
+        amount        REAL    NOT NULL CHECK(amount > 0),
+        category      TEXT    NOT NULL,
+        date          TEXT    NOT NULL,
+        note          TEXT,
+        currency      TEXT    NOT NULL DEFAULT 'USD',
+        exchange_rate REAL    NOT NULL DEFAULT 1.0
       );
     `);
 
@@ -124,6 +128,34 @@ function _initSchema(database) {
       // Column may already exist
     }
 
+    // Migration: add currency column to income
+    try {
+      database.exec("ALTER TABLE income ADD COLUMN currency TEXT NOT NULL DEFAULT 'USD';");
+    } catch (err) {
+      // Column may already exist
+    }
+
+    // Migration: add exchange_rate column to income
+    try {
+      database.exec("ALTER TABLE income ADD COLUMN exchange_rate REAL NOT NULL DEFAULT 1.0;");
+    } catch (err) {
+      // Column may already exist
+    }
+
+    // Migration: add currency column to expenses
+    try {
+      database.exec("ALTER TABLE expenses ADD COLUMN currency TEXT NOT NULL DEFAULT 'USD';");
+    } catch (err) {
+      // Column may already exist
+    }
+
+    // Migration: add exchange_rate column to expenses
+    try {
+      database.exec("ALTER TABLE expenses ADD COLUMN exchange_rate REAL NOT NULL DEFAULT 1.0;");
+    } catch (err) {
+      // Column may already exist
+    }
+
     // Seed the one-and-only settings row if it does not yet exist
     database.exec(`
       INSERT OR IGNORE INTO settings (id, currency, theme, language, usd_to_syp_rate)
@@ -138,21 +170,21 @@ function _initSchema(database) {
  * Inserts a new income entry and returns the full record including its
  * auto-generated id.
  *
- * @param {{ title: string, amount: number, date: string, note?: string }} data
- * @returns {{ id: number, title: string, amount: number, date: string, note: string|null }}
+ * @param {{ title: string, amount: number, date: string, note?: string, currency?: string, exchange_rate?: number }} data
+ * @returns {{ id: number, title: string, amount: number, date: string, note: string|null, currency: string, exchange_rate: number }}
  */
-function addIncome({ title, amount, date, note = null }) {
+function addIncome({ title, amount, date, note = null, currency = 'USD', exchange_rate = 1.0 }) {
   const stmt = db.prepare(
-    'INSERT INTO income (title, amount, date, note) VALUES (?, ?, ?, ?)'
+    'INSERT INTO income (title, amount, date, note, currency, exchange_rate) VALUES (?, ?, ?, ?, ?, ?)'
   );
-  const result = stmt.run(title, amount, date, note);
-  return { id: result.lastInsertRowid, title, amount, date, note };
+  const result = stmt.run(title, amount, date, note, currency, exchange_rate);
+  return { id: result.lastInsertRowid, title, amount, date, note, currency, exchange_rate };
 }
 
 /**
  * Returns all income entries ordered by date descending.
  *
- * @returns {Array<{ id: number, title: string, amount: number, date: string, note: string|null }>}
+ * @returns {Array<{ id: number, title: string, amount: number, date: string, note: string|null, currency: string, exchange_rate: number }>}
  */
 function getAllIncomes() {
   return db.prepare('SELECT * FROM income ORDER BY date DESC').all();
@@ -162,14 +194,14 @@ function getAllIncomes() {
  * Updates an existing income entry by id.
  *
  * @param {number} id
- * @param {{ title: string, amount: number, date: string, note?: string }} data
+ * @param {{ title: string, amount: number, date: string, note?: string, currency?: string, exchange_rate?: number }} data
  * @returns {{ changes: number }}
  */
-function updateIncome(id, { title, amount, date, note = null }) {
+function updateIncome(id, { title, amount, date, note = null, currency = 'USD', exchange_rate = 1.0 }) {
   const stmt = db.prepare(
-    'UPDATE income SET title = ?, amount = ?, date = ?, note = ? WHERE id = ?'
+    'UPDATE income SET title = ?, amount = ?, date = ?, note = ?, currency = ?, exchange_rate = ? WHERE id = ?'
   );
-  const result = stmt.run(title, amount, date, note, id);
+  const result = stmt.run(title, amount, date, note, currency, exchange_rate, id);
   return { changes: result.changes };
 }
 
@@ -190,21 +222,21 @@ function deleteIncome(id) {
  * Inserts a new expense entry and returns the full record including its
  * auto-generated id.
  *
- * @param {{ title: string, amount: number, category: string, date: string, note?: string }} data
- * @returns {{ id: number, title: string, amount: number, category: string, date: string, note: string|null }}
+ * @param {{ title: string, amount: number, category: string, date: string, note?: string, currency?: string, exchange_rate?: number }} data
+ * @returns {{ id: number, title: string, amount: number, category: string, date: string, note: string|null, currency: string, exchange_rate: number }}
  */
-function addExpense({ title, amount, category, date, note = null }) {
+function addExpense({ title, amount, category, date, note = null, currency = 'USD', exchange_rate = 1.0 }) {
   const stmt = db.prepare(
-    'INSERT INTO expenses (title, amount, category, date, note) VALUES (?, ?, ?, ?, ?)'
+    'INSERT INTO expenses (title, amount, category, date, note, currency, exchange_rate) VALUES (?, ?, ?, ?, ?, ?, ?)'
   );
-  const result = stmt.run(title, amount, category, date, note);
-  return { id: result.lastInsertRowid, title, amount, category, date, note };
+  const result = stmt.run(title, amount, category, date, note, currency, exchange_rate);
+  return { id: result.lastInsertRowid, title, amount, category, date, note, currency, exchange_rate };
 }
 
 /**
  * Returns all expense entries ordered by date descending.
  *
- * @returns {Array<{ id: number, title: string, amount: number, category: string, date: string, note: string|null }>}
+ * @returns {Array<{ id: number, title: string, amount: number, category: string, date: string, note: string|null, currency: string, exchange_rate: number }>}
  */
 function getAllExpenses() {
   return db.prepare('SELECT * FROM expenses ORDER BY date DESC').all();
@@ -214,14 +246,14 @@ function getAllExpenses() {
  * Updates an existing expense entry by id.
  *
  * @param {number} id
- * @param {{ title: string, amount: number, category: string, date: string, note?: string }} data
+ * @param {{ title: string, amount: number, category: string, date: string, note?: string, currency?: string, exchange_rate?: number }} data
  * @returns {{ changes: number }}
  */
-function updateExpense(id, { title, amount, category, date, note = null }) {
+function updateExpense(id, { title, amount, category, date, note = null, currency = 'USD', exchange_rate = 1.0 }) {
   const stmt = db.prepare(
-    'UPDATE expenses SET title = ?, amount = ?, category = ?, date = ?, note = ? WHERE id = ?'
+    'UPDATE expenses SET title = ?, amount = ?, category = ?, date = ?, note = ?, currency = ?, exchange_rate = ? WHERE id = ?'
   );
-  const result = stmt.run(title, amount, category, date, note, id);
+  const result = stmt.run(title, amount, category, date, note, currency, exchange_rate, id);
   return { changes: result.changes };
 }
 
@@ -278,15 +310,36 @@ function updateSettings({ currency, theme, language, usd_to_syp_rate }) {
  * }}
  */
 function getStatistics() {
-  // Total income (NULL-safe: returns 0 when no rows exist)
+  const settings = getSettings();
+  const baseCurrency = settings.currency;
+
+  // Total income (CASE converted to base currency)
   const totalIncome = db
-    .prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM income')
-    .get().total;
+    .prepare(
+      'SELECT COALESCE(SUM(' +
+      '  CASE ' +
+      '    WHEN currency = :baseCurrency THEN amount ' +
+      '    WHEN currency = \'USD\' AND :baseCurrency = \'SYP\' THEN amount * exchange_rate ' +
+      '    WHEN currency = \'SYP\' AND :baseCurrency = \'USD\' THEN amount / exchange_rate ' +
+      '    ELSE amount ' +
+      '  END' +
+      '), 0) AS total FROM income'
+    )
+    .get({ baseCurrency }).total;
 
   // Total expenses
   const totalExpenses = db
-    .prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM expenses')
-    .get().total;
+    .prepare(
+      'SELECT COALESCE(SUM(' +
+      '  CASE ' +
+      '    WHEN currency = :baseCurrency THEN amount ' +
+      '    WHEN currency = \'USD\' AND :baseCurrency = \'SYP\' THEN amount * exchange_rate ' +
+      '    WHEN currency = \'SYP\' AND :baseCurrency = \'USD\' THEN amount / exchange_rate ' +
+      '    ELSE amount ' +
+      '  END' +
+      '), 0) AS total FROM expenses'
+    )
+    .get({ baseCurrency }).total;
 
   // Total transaction count across both tables
   const transactionCount = db
@@ -295,21 +348,35 @@ function getStatistics() {
     )
     .get().cnt;
 
-  // Expenses grouped by category, descending by total spend
+  // Expenses grouped by category, descending by total spend (converted to base currency)
   const expensesByCategory = db
     .prepare(
-      'SELECT category, COALESCE(SUM(amount), 0) AS total ' +
+      'SELECT category, COALESCE(SUM(' +
+      '  CASE ' +
+      '    WHEN currency = :baseCurrency THEN amount ' +
+      '    WHEN currency = \'USD\' AND :baseCurrency = \'SYP\' THEN amount * exchange_rate ' +
+      '    WHEN currency = \'SYP\' AND :baseCurrency = \'USD\' THEN amount / exchange_rate ' +
+      '    ELSE amount ' +
+      '  END' +
+      '), 0) AS total ' +
       'FROM expenses GROUP BY category ORDER BY total DESC'
     )
-    .all();
+    .all({ baseCurrency });
 
   // Expenses grouped by month (YYYY-MM), ascending chronological order
   const expensesByMonth = db
     .prepare(
-      "SELECT strftime('%Y-%m', date) AS month, COALESCE(SUM(amount), 0) AS total " +
+      'SELECT strftime(\'%Y-%m\', date) AS month, COALESCE(SUM(' +
+      '  CASE ' +
+      '    WHEN currency = :baseCurrency THEN amount ' +
+      '    WHEN currency = \'USD\' AND :baseCurrency = \'SYP\' THEN amount * exchange_rate ' +
+      '    WHEN currency = \'SYP\' AND :baseCurrency = \'USD\' THEN amount / exchange_rate ' +
+      '    ELSE amount ' +
+      '  END' +
+      '), 0) AS total ' +
       'FROM expenses GROUP BY month ORDER BY month ASC'
     )
-    .all();
+    .all({ baseCurrency });
 
   return {
     totalIncome,
@@ -343,9 +410,9 @@ function getStatistics() {
 function getRecentTransactions() {
   return db
     .prepare(
-      "SELECT 'income'  AS type, id, title, amount, NULL AS category, date, note FROM income " +
+      "SELECT 'income'  AS type, id, title, amount, NULL AS category, date, note, currency, exchange_rate FROM income " +
       'UNION ALL ' +
-      "SELECT 'expense' AS type, id, title, amount, category,          date, note FROM expenses " +
+      "SELECT 'expense' AS type, id, title, amount, category,          date, note, currency, exchange_rate FROM expenses " +
       'ORDER BY date DESC ' +
       'LIMIT 10'
     )

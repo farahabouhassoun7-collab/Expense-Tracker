@@ -15,6 +15,9 @@ import { applyLanguage, translate } from './translations.js';
 /** @type {string} Currently active page ID */
 let activePage = 'dashboard';
 
+/** @type {object | null} Settings cache */
+let currentSettings = null;
+
 /** @type {Window['api']} Electron IPC bridge */
 const { api } = window;
 
@@ -131,6 +134,7 @@ async function refreshActivePage() {
   try {
     const settings = await loadSettings();
     if (settings) {
+      currentSettings = settings;
       setDashboardCurrency(settings.currency);
       setTransactionsCurrency(settings.currency);
       setStatisticsCurrency(settings.currency);
@@ -201,23 +205,42 @@ function openModal(type, data = null) {
     const amountInput = document.getElementById('modal-amount-input');
     const dateInput = document.getElementById('modal-date-input');
     const noteInput = document.getElementById('modal-note-textarea');
+    const currencySelect = document.getElementById('modal-currency-select');
+    const exchangeRateInput = document.getElementById('modal-exchange-rate-input');
 
     if (titleInput) titleInput.value = data.title || '';
     if (amountInput) amountInput.value = data.amount || '';
     if (dateInput) dateInput.value = data.date || '';
     if (noteInput) noteInput.value = data.note || '';
+    if (currencySelect) currencySelect.value = data.currency || 'USD';
+    if (exchangeRateInput) exchangeRateInput.value = data.exchange_rate || 15000;
 
     // Fill category for expenses
     if (type === 'expense') {
       const categorySelect = document.getElementById('modal-category-select');
       if (categorySelect) categorySelect.value = data.category || '';
     }
+
+    // Set dynamic amount prefix symbol
+    const symbol = getCurrencySymbol(data.currency || 'USD');
+    const prefixEl = document.getElementById('modal-amount-prefix');
+    if (prefixEl) prefixEl.textContent = symbol;
   } else {
     // Clear form for add mode
     modalForm.reset();
     document.getElementById('modal-id').value = '';
     document.getElementById('modal-type').value = type;
     document.getElementById('modal-date-input').value = new Date().toISOString().split('T')[0];
+
+    const currencySelect = document.getElementById('modal-currency-select');
+    const exchangeRateInput = document.getElementById('modal-exchange-rate-input');
+    if (currencySelect && currentSettings) currencySelect.value = currentSettings.currency || 'USD';
+    if (exchangeRateInput && currentSettings) exchangeRateInput.value = currentSettings.usd_to_syp_rate || 15000;
+
+    // Set dynamic amount prefix symbol
+    const symbol = getCurrencySymbol((currentSettings && currentSettings.currency) || 'USD');
+    const prefixEl = document.getElementById('modal-amount-prefix');
+    if (prefixEl) prefixEl.textContent = symbol;
   }
 
   // Clear any previous error messages
@@ -361,6 +384,15 @@ function setupModal() {
     });
   }
 
+  const currencySelect = document.getElementById('modal-currency-select');
+  if (currencySelect) {
+    currencySelect.addEventListener('change', () => {
+      const symbol = getCurrencySymbol(currencySelect.value);
+      const prefixEl = document.getElementById('modal-amount-prefix');
+      if (prefixEl) prefixEl.textContent = symbol;
+    });
+  }
+
   // Validate and handle form submission
   if (modalForm) {
     modalForm.addEventListener('submit', async (event) => {
@@ -374,9 +406,12 @@ function setupModal() {
       const category = document.getElementById('modal-category-select').value;
       const date = document.getElementById('modal-date-input').value;
       const note = document.getElementById('modal-note-textarea').value;
+      const currency = document.getElementById('modal-currency-select').value;
+      const exchangeRateStr = document.getElementById('modal-exchange-rate-input').value;
 
       const id = idStr ? Number(idStr) : null;
       const amount = Number(amountStr);
+      const exchange_rate = Number(exchangeRateStr) || 1.0;
 
       const formData = {
         title,
@@ -415,6 +450,8 @@ function setupModal() {
         amount,
         date,
         note: note.trim() || null,
+        currency,
+        exchange_rate,
       };
       if (type === 'expense') {
         payload.category = category;
@@ -509,6 +546,7 @@ async function initApp() {
 
       const settings = await loadSettings();
       if (settings) {
+        currentSettings = settings;
         setDashboardCurrency(settings.currency);
         setTransactionsCurrency(settings.currency);
         setStatisticsCurrency(settings.currency);
