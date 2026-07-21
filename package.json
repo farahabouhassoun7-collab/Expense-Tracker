@@ -1,0 +1,50 @@
+{
+  "name": "personal-expense-tracker",
+  "version": "1.0.0",
+  "description": "A simple offline desktop application to track personal income and expenses",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "node node_modules/prebuild-install/bin.js --runtime electron --target 33.4.11 --arch x64 --dist-url https://electronjs.org/headers",
+    "postinstall": "node node_modules/prebuild-install/bin.js --runtime electron --target 33.4.11 --arch x64 --dist-url https://electronjs.org/headers",
+    "package": "electron-builder --win"
+  },
+  "keywords": [
+    "expense",
+    "tracker",
+    "finance",
+    "electron",
+    "desktop"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@electron/rebuild": "4.2.0",
+    "electron": "33.4.11",
+    "electron-builder": "26.15.3"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.11.1"
+  },
+  "build": {
+    "appId": "com.personal.expensetracker",
+    "productName": "Personal Expense Tracker",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/renderer/assets/icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!C:\\**/*"
+    ],
+    "asar": true
+  }
+}

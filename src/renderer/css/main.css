@@ -1,0 +1,604 @@
+/* ==========================================================================
+   main.css — Global Styles, Tokens, Typography, Layout Utilities
+   Personal Expense Tracker · Design System v1.0
+   ==========================================================================
+   Load order in index.html:
+     1. themes.css   (CSS variables — must be first)
+     2. main.css     (this file — consumes those variables)
+     3. components.css
+     4. charts.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. DESIGN TOKEN DECLARATIONS
+      Typography · Spacing · Border radius · Animation timings
+   -------------------------------------------------------------------------- */
+:root {
+  /* ── Typography — font families ─────────────────────────────────────── */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+
+  /* ── Typography — size scale ────────────────────────────────────────── */
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 14px;
+  --text-md:   15px;
+  --text-lg:   18px;
+  --text-xl:   22px;
+  --text-2xl:  28px;
+  --text-3xl:  36px;
+
+  /* ── Typography — line heights (paired with each size) ──────────────── */
+  --lh-xs:   16px;
+  --lh-sm:   20px;
+  --lh-base: 22px;
+  --lh-md:   24px;
+  --lh-lg:   28px;
+  --lh-xl:   30px;
+  --lh-2xl:  36px;
+  --lh-3xl:  44px;
+
+  /* ── Spacing scale (4px base) ───────────────────────────────────────── */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ── Border radius ──────────────────────────────────────────────────── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-full: 9999px;
+
+  /* ── Animation timing ───────────────────────────────────────────────── */
+  --duration-instant:  80ms;
+  --duration-fast:    120ms;
+  --duration-normal:  200ms;
+  --duration-slow:    300ms;
+
+  --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   1. CSS RESET
+      Minimal, modern reset — no third-party dependency.
+   -------------------------------------------------------------------------- */
+
+/* Box model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove list styles on <ul> and <ol> used as UI components */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Inherit fonts everywhere */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Avoid text overflow */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* Remove default anchor decoration */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Table reset */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. BASE ELEMENT STYLES
+      Applied to the document root and body.
+   -------------------------------------------------------------------------- */
+
+html {
+  /* Smooth theme transitions when toggling data-theme */
+  color-scheme: light dark;
+  font-size: 16px;            /* Keeps rem calculations predictable */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
+  font-weight: 400;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-base);
+
+  /* Electron: prevent text selection on UI chrome */
+  user-select: none;
+
+  /* Fill the entire Electron window */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Allow text selection only inside content areas where it makes sense */
+.selectable {
+  user-select: text;
+}
+
+/* --------------------------------------------------------------------------
+   3. TYPOGRAPHY UTILITY CLASSES
+      Use these instead of arbitrary font-size declarations.
+   -------------------------------------------------------------------------- */
+
+.text-xs   { font-size: var(--text-xs);   line-height: var(--lh-xs);   }
+.text-sm   { font-size: var(--text-sm);   line-height: var(--lh-sm);   }
+.text-base { font-size: var(--text-base); line-height: var(--lh-base); }
+.text-md   { font-size: var(--text-md);   line-height: var(--lh-md);   }
+.text-lg   { font-size: var(--text-lg);   line-height: var(--lh-lg);   }
+.text-xl   { font-size: var(--text-xl);   line-height: var(--lh-xl);   }
+.text-2xl  { font-size: var(--text-2xl);  line-height: var(--lh-2xl);  }
+.text-3xl  { font-size: var(--text-3xl);  line-height: var(--lh-3xl);  }
+
+/* Font weight helpers */
+.font-regular  { font-weight: 400; }
+.font-medium   { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold     { font-weight: 700; }
+
+/* Font family helpers */
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Text color helpers */
+.text-primary   { color: var(--color-text-primary);   }
+.text-secondary { color: var(--color-text-secondary); }
+.text-disabled  { color: var(--color-text-disabled);  }
+.text-success   { color: var(--color-success);        }
+.text-error     { color: var(--color-error);          }
+.text-warning   { color: var(--color-warning);        }
+.text-brand     { color: var(--color-primary);        }
+
+/* Truncate single-line text with ellipsis */
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------------------------
+   4. MONETARY AMOUNT CLASSES
+      All currency values use monospace + tabular-nums for digit alignment.
+   -------------------------------------------------------------------------- */
+
+.amount {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.amount--income  { color: var(--color-success); }
+.amount--expense { color: var(--color-error);   }
+.amount--neutral { color: var(--color-text-primary); }
+.amount--balance { color: var(--color-primary); }
+
+/* --------------------------------------------------------------------------
+   5. SPACING UTILITY CLASSES
+      Gap helpers for flex/grid containers.
+   -------------------------------------------------------------------------- */
+
+.gap-1  { gap: var(--space-1);  }
+.gap-2  { gap: var(--space-2);  }
+.gap-3  { gap: var(--space-3);  }
+.gap-4  { gap: var(--space-4);  }
+.gap-5  { gap: var(--space-5);  }
+.gap-6  { gap: var(--space-6);  }
+.gap-8  { gap: var(--space-8);  }
+
+/* Padding helpers (all sides) */
+.p-1  { padding: var(--space-1);  }
+.p-2  { padding: var(--space-2);  }
+.p-3  { padding: var(--space-3);  }
+.p-4  { padding: var(--space-4);  }
+.p-5  { padding: var(--space-5);  }
+.p-6  { padding: var(--space-6);  }
+
+/* Margin helpers (top) */
+.mt-1  { margin-top: var(--space-1);  }
+.mt-2  { margin-top: var(--space-2);  }
+.mt-3  { margin-top: var(--space-3);  }
+.mt-4  { margin-top: var(--space-4);  }
+.mt-6  { margin-top: var(--space-6);  }
+.mt-8  { margin-top: var(--space-8);  }
+
+/* --------------------------------------------------------------------------
+   6. LAYOUT UTILITIES
+      Flex and grid primitives.
+   -------------------------------------------------------------------------- */
+
+/* Flex row */
+.flex         { display: flex; }
+.flex-col     { display: flex; flex-direction: column; }
+.flex-center  { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-start   { display: flex; align-items: center; justify-content: flex-start; }
+.flex-end     { display: flex; align-items: center; justify-content: flex-end; }
+.flex-wrap    { flex-wrap: wrap; }
+.flex-1       { flex: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+.items-start  { align-items: flex-start; }
+.items-end    { align-items: flex-end; }
+
+/* Grid */
+.grid   { display: grid; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+
+/* Width / height */
+.w-full  { width: 100%; }
+.h-full  { height: 100%; }
+.min-w-0 { min-width: 0; }   /* Allows flex children to shrink below content size */
+
+/* Overflow */
+.overflow-hidden { overflow: hidden; }
+.overflow-auto   { overflow: auto; }
+.overflow-y-auto { overflow-y: auto; }
+
+/* Position */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed    { position: fixed; }
+
+/* Visibility */
+.hidden  { display: none !important; }
+.visible { visibility: visible; }
+.sr-only {
+  /* Screen-reader-only: visually hidden but accessible */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7. APPLICATION SHELL LAYOUT
+      The permanent three-zone structure: sidebar | header + content.
+      Section content is placed by Tasks 17+ (Phase 4 pages).
+   -------------------------------------------------------------------------- */
+
+/* Root shell — fills the full Electron window */
+.app-shell {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--color-bg-base);
+}
+
+/* ── Sidebar ───────────────────────────────────────────────────────────── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-6) var(--space-4) var(--space-4);
+  overflow: hidden;
+
+  /* Smooth theme-switch color change */
+  transition:
+    background-color var(--duration-fast) var(--ease-default),
+    border-color     var(--duration-fast) var(--ease-default);
+}
+
+/* ── Main column (header + content) ────────────────────────────────────── */
+.main-column {
+  flex: 1;
+  min-width: 0;       /* Prevents flex child overflow */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Top header ─────────────────────────────────────────────────────────── */
+.app-header {
+  flex-shrink: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-6);
+  background-color: var(--color-bg-raised);
+  border-bottom: 1px solid var(--color-border);
+  transition:
+    background-color var(--duration-fast) var(--ease-default),
+    border-color     var(--duration-fast) var(--ease-default);
+}
+
+/* ── Content area ───────────────────────────────────────────────────────── */
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+  background-color: var(--color-bg-base);
+  transition: background-color var(--duration-fast) var(--ease-default);
+
+  /* Custom scrollbar — subtle, matches theme */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.content-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.content-area::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   8. SIDEBAR COMPONENTS
+   -------------------------------------------------------------------------- */
+
+/* App brand / logo block */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 48px;
+  margin-bottom: var(--space-6);
+  flex-shrink: 0;
+}
+
+.sidebar-brand-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.sidebar-brand-name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Nav list */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+/* Individual nav item */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 38px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--color-sidebar-text);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-default),
+    color            var(--duration-fast) var(--ease-default);
+  /* Prevent text selection on nav clicks */
+  user-select: none;
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-sidebar-icon);
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+/* Hover state */
+.nav-item:hover {
+  background-color: var(--color-bg-base);
+}
+
+/* Active / current page */
+.nav-item.active,
+.nav-item[aria-current="page"] {
+  background-color: var(--color-sidebar-active);
+  color: var(--color-primary);
+}
+
+.nav-item.active svg,
+.nav-item[aria-current="page"] svg {
+  color: var(--color-primary);
+}
+
+/* Focus ring */
+.nav-item:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Sidebar divider */
+.sidebar-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-3) 0;
+}
+
+/* Sidebar footer (theme toggle + version) */
+.sidebar-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+}
+
+.sidebar-version {
+  font-size: var(--text-xs);
+  color: var(--color-text-disabled);
+  padding: 0 var(--space-3);
+}
+
+/* --------------------------------------------------------------------------
+   9. PAGE HEADER COMPONENTS
+   -------------------------------------------------------------------------- */
+
+.page-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: var(--lh-xl);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* --------------------------------------------------------------------------
+   10. PAGE SECTION ANIMATION
+       Sections fade in when made visible. Applied by renderer.js
+       when switching pages (Task 23).
+   -------------------------------------------------------------------------- */
+
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.page-section {
+  animation: page-fade-in var(--duration-slow) var(--ease-out);
+}
+
+/* --------------------------------------------------------------------------
+   11. ACCESSIBILITY
+   -------------------------------------------------------------------------- */
+
+/* Universal focus ring — replaces default browser outline */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Remove focus ring for mouse interactions */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. SCROLLBAR RESET (global)
+      Applied where overflow: auto / scroll is used.
+   -------------------------------------------------------------------------- */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+/* --------------------------------------------------------------------------
+   13. THEME TRANSITION SMOOTHING
+      Prevents jarring flash when toggling between light and dark.
+   -------------------------------------------------------------------------- */
+
+html {
+  transition:
+    background-color var(--duration-fast) var(--ease-default),
+    color            var(--duration-fast) var(--ease-default);
+}

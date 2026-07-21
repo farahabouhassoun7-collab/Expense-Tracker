@@ -1,0 +1,150 @@
+/* ==========================================================================
+   themes.css — CSS Custom Properties (Design System Tokens)
+   Personal Expense Tracker · Design System v1.0
+   ==========================================================================
+   All visual decisions live here as CSS variables.
+   Changing data-theme="dark" on <html> is the ONLY mechanism for
+   switching themes — no JavaScript touching individual element styles.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   LIGHT THEME  (default — :root)
+   -------------------------------------------------------------------------- */
+:root {
+  /* ── Brand ──────────────────────────────────────────────────────────── */
+  --color-primary:          #5C6BC0;   /* Indigo 400 */
+  --color-primary-hover:    #3F51B5;   /* Indigo 600 */
+  --color-primary-subtle:   #EEF0FB;   /* Indigo 50 */
+
+  /* ── Secondary ──────────────────────────────────────────────────────── */
+  --color-secondary:        #78909C;   /* Blue Grey 400 */
+
+  /* ── Accent ─────────────────────────────────────────────────────────── */
+  --color-accent:           #26C6DA;   /* Cyan 400 */
+
+  /* ── Semantic — Success ─────────────────────────────────────────────── */
+  --color-success:          #2E7D32;   /* Green 800 */
+  --color-success-subtle:   #E8F5E9;   /* Green 50 */
+
+  /* ── Semantic — Warning ─────────────────────────────────────────────── */
+  --color-warning:          #E65100;   /* Deep Orange 900 */
+  --color-warning-subtle:   #FFF3E0;   /* Orange 50 */
+
+  /* ── Semantic — Error ───────────────────────────────────────────────── */
+  --color-error:            #C62828;   /* Red 800 */
+  --color-error-subtle:     #FFEBEE;   /* Red 50 */
+
+  /* ── Backgrounds ────────────────────────────────────────────────────── */
+  --color-bg-base:          #F4F5F7;   /* Window / outermost */
+  --color-bg-raised:        #FFFFFF;   /* Cards, sidebar */
+  --color-bg-overlay:       #FFFFFF;   /* Modals, dropdowns */
+
+  /* ── Borders ─────────────────────────────────────────────────────────── */
+  --color-border:           #E2E4E9;
+  --color-border-strong:    #5C6BC0;   /* Focus state — matches primary */
+
+  /* ── Text ───────────────────────────────────────────────────────────── */
+  --color-text-primary:     #1A1D23;
+  --color-text-secondary:   #6B7280;   /* Neutral 500 */
+  --color-text-disabled:    #B0B7C3;
+
+  /* ── Sidebar ────────────────────────────────────────────────────────── */
+  --color-sidebar-bg:       #FFFFFF;
+  --color-sidebar-active:   #EEF0FB;
+  --color-sidebar-text:     #374151;
+  --color-sidebar-icon:     #6B7280;
+
+  /* ── Shadows — Level 0: flat ────────────────────────────────────────── */
+  --shadow-none:   none;
+
+  /* ── Shadows — Level 1: cards ───────────────────────────────────────── */
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+
+  /* ── Shadows — Level 2: dropdowns ──────────────────────────────────── */
+  --shadow-dropdown:
+    0 4px 6px  rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.10);
+
+  /* ── Shadows — Level 3: modals ──────────────────────────────────────── */
+  --shadow-modal:
+    0 8px 16px  rgba(0, 0, 0, 0.08),
+    0 24px 48px rgba(0, 0, 0, 0.16);
+
+  /* ── Shadows — Focus ring ───────────────────────────────────────────── */
+  --shadow-focus: 0 0 0 3px rgba(92, 107, 192, 0.35);
+
+  /* ── Chart category colors ──────────────────────────────────────────── */
+  --chart-food:          #5C6BC0;
+  --chart-transport:     #26C6DA;
+  --chart-shopping:      #AB47BC;
+  --chart-bills:         #EF5350;
+  --chart-entertainment: #FFA726;
+  --chart-healthcare:    #66BB6A;
+  --chart-other:         #78909C;
+}
+
+/* --------------------------------------------------------------------------
+   DARK THEME  ([data-theme="dark"] on <html>)
+   Only the values that differ from light theme are redefined.
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  /* ── Brand ──────────────────────────────────────────────────────────── */
+  --color-primary:          #7986CB;   /* Indigo 300 — lighter for dark bg */
+  --color-primary-hover:    #9FA8DA;   /* Indigo 200 */
+  --color-primary-subtle:   #1E2140;   /* Deep indigo tint */
+
+  /* ── Secondary ──────────────────────────────────────────────────────── */
+  --color-secondary:        #90A4AE;   /* Blue Grey 300 */
+
+  /* ── Accent ─────────────────────────────────────────────────────────── */
+  --color-accent:           #4DD0E1;   /* Cyan 300 */
+
+  /* ── Semantic — Success ─────────────────────────────────────────────── */
+  --color-success:          #66BB6A;   /* Green 400 */
+  --color-success-subtle:   #1B3A1E;
+
+  /* ── Semantic — Warning ─────────────────────────────────────────────── */
+  --color-warning:          #FFA726;   /* Orange 400 */
+  --color-warning-subtle:   #3A2A10;
+
+  /* ── Semantic — Error ───────────────────────────────────────────────── */
+  --color-error:            #EF5350;   /* Red 400 */
+  --color-error-subtle:     #3A1A1A;
+
+  /* ── Backgrounds — layered dark greys ──────────────────────────────── */
+  --color-bg-base:          #0F1117;   /* Darkest — window bg */
+  --color-bg-raised:        #181C24;   /* Cards, sidebar */
+  --color-bg-overlay:       #1E2330;   /* Modals, dropdowns */
+
+  /* ── Borders ─────────────────────────────────────────────────────────── */
+  --color-border:           #2A2F3E;
+  --color-border-strong:    #7986CB;
+
+  /* ── Text ───────────────────────────────────────────────────────────── */
+  --color-text-primary:     #E8EAF0;
+  --color-text-secondary:   #8B92A5;
+  --color-text-disabled:    #3D4455;
+
+  /* ── Sidebar ────────────────────────────────────────────────────────── */
+  --color-sidebar-bg:       #181C24;
+  --color-sidebar-active:   #1E2140;
+  --color-sidebar-text:     #C5CAE9;
+  --color-sidebar-icon:     #8B92A5;
+
+  /* ── Shadows — stronger on dark backgrounds ─────────────────────────── */
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.20),
+    0 2px 8px rgba(0, 0, 0, 0.30);
+
+  --shadow-dropdown:
+    0 4px 8px  rgba(0, 0, 0, 0.30),
+    0 12px 32px rgba(0, 0, 0, 0.40);
+
+  --shadow-modal:
+    0 8px 20px  rgba(0, 0, 0, 0.40),
+    0 32px 64px rgba(0, 0, 0, 0.50);
+
+  --shadow-focus: 0 0 0 3px rgba(121, 134, 203, 0.45);
+}

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Expense Tracker</title>
+
+  <!-- Design System — load order matters -->
+  <link rel="stylesheet" href="../css/themes.css" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     APPLICATION SHELL
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div class="app-shell">
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       SIDEBAR
+       ───────────────────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <!-- Wallet icon -->
+      <svg class="sidebar-brand-icon" xmlns="http://www.w3.org/2000/svg"
+           width="28" height="28" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.75"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+      </svg>
+      <span class="sidebar-brand-name">Expense Tracker</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+
+      <!-- Dashboard -->
+      <button class="nav-item active" id="nav-dashboard"
+              aria-current="page" data-page="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <rect width="7" height="9" x="3" y="3" rx="1"/>
+          <rect width="7" height="5" x="14" y="3" rx="1"/>
+          <rect width="7" height="9" x="14" y="12" rx="1"/>
+          <rect width="7" height="5" x="3" y="16" rx="1"/>
+        </svg>
+        Dashboard
+      </button>
+
+      <!-- Transactions -->
+      <button class="nav-item" id="nav-transactions" data-page="transactions">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="m17 11-5-5-5 5"/>
+          <path d="m17 18-5-5-5 5"/>
+        </svg>
+        Transactions
+      </button>
+
+      <!-- Statistics -->
+      <button class="nav-item" id="nav-statistics" data-page="statistics">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <line x1="18" x2="18" y1="20" y2="10"/>
+          <line x1="12" x2="12" y1="20" y2="4"/>
+          <line x1="6"  x2="6"  y1="20" y2="14"/>
+        </svg>
+        Statistics
+      </button>
+
+      <!-- Settings -->
+      <button class="nav-item" id="nav-settings" data-page="settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Settings
+      </button>
+
+    </nav><!-- /sidebar-nav -->
+
+    <!-- Sidebar divider -->
+    <hr class="divider" />
+
+    <!-- Sidebar footer: theme toggle + version -->
+    <div class="sidebar-footer">
+      <div class="theme-toggle" role="group" aria-label="Theme selection">
+        <button class="theme-toggle__btn active" id="theme-light" aria-pressed="true">
+          <!-- Sun icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          Light
+        </button>
+        <button class="theme-toggle__btn" id="theme-dark" aria-pressed="false">
+          <!-- Moon icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+          Dark
+        </button>
+      </div>
+      <span class="sidebar-version">v1.0.0</span>
+    </div>
+
+  </aside><!-- /sidebar -->
+
+  <!-- ─────────────────────────────────────────────────────────────────────
+       MAIN COLUMN  (header + content)
+       ───────────────────────────────────────────────────────────────────── -->
+  <div class="main-column">
+
+    <!-- Top header -->
+    <header class="app-header" id="app-header">
+      <h1 class="page-title" id="page-title">Dashboard</h1>
+      <div class="header-actions">
+        <button class="btn btn-secondary" id="btn-add-income">
+          <!-- Plus-circle icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v8M8 12h8"/>
+          </svg>
+          Add Income
+        </button>
+        <button class="btn btn-primary" id="btn-add-expense">
+          <!-- Minus-circle icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 12h8"/>
+          </svg>
+          Add Expense
+        </button>
+      </div>
+    </header>
+
+    <!-- ───────────────────────────────────────────────────────────────────
+         CONTENT AREA — holds all page sections
+         ─────────────────────────────────────────────────────────────────── -->
+    <main class="content-area" id="content-area">
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           SECTION: DASHBOARD  (Task 18)
+           ═══════════════════════════════════════════════════════════════ -->
+      <section id="page-dashboard" class="page-section" role="main" aria-label="Dashboard">
+
+        <!-- Summary cards grid -->
+        <div class="summary-grid" id="summary-grid">
+
+          <!-- Balance -->
+          <div class="card summary-card" id="card-balance">
+            <div class="summary-card__meta">
+              <svg class="summary-card__icon summary-card__icon--balance"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+              </svg>
+              <span class="summary-card__label">Balance</span>
+            </div>
+            <div class="summary-card__value summary-card__value--balance"
+                 id="stat-balance" aria-label="Current balance">$0.00</div>
+            <div class="summary-card__trend" id="stat-balance-trend"></div>
+          </div>
+
+          <!-- Total Income -->
+          <div class="card summary-card" id="card-income">
+            <div class="summary-card__meta">
+              <svg class="summary-card__icon summary-card__icon--income"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+              <span class="summary-card__label">Total Income</span>
+            </div>
+            <div class="summary-card__value summary-card__value--income"
+                 id="stat-income" aria-label="Total income">$0.00</div>
+            <div class="summary-card__trend" id="stat-income-trend"></div>
+          </div>
+
+          <!-- Total Expenses -->
+          <div class="card summary-card" id="card-expenses">
+            <div class="summary-card__meta">
+              <svg class="summary-card__icon summary-card__icon--expense"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
+                <polyline points="16 17 22 17 22 11"/>
+              </svg>
+              <span class="summary-card__label">Total Expenses</span>
+            </div>
+            <div class="summary-card__value summary-card__value--expense"
+                 id="stat-expenses" aria-label="Total expenses">$0.00</div>
+            <div class="summary-card__trend" id="stat-expenses-trend"></div>
+          </div>
+
+          <!-- Transaction Count -->
+          <div class="card summary-card" id="card-count">
+            <div class="summary-card__meta">
+              <svg class="summary-card__icon summary-card__icon--count"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
+                <path d="m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.67 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/>
+                <path d="m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.67 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"/>
+              </svg>
+              <span class="summary-card__label">Transactions</span>
+            </div>
+            <div class="summary-card__value summary-card__value--count"
+                 id="stat-count" aria-label="Total transactions">0</div>
+            <div class="summary-card__trend" id="stat-count-sub"
+                 style="font-size:var(--text-xs);color:var(--color-text-secondary);">all time</div>
+          </div>
+
+        </div><!-- /summary-grid -->
+
+        <!-- Lower section: chart + recent transactions -->
+        <div class="dashboard-lower">
+
+          <!-- Doughnut chart card -->
+          <div class="card chart-card" id="dashboard-chart-card">
+            <div class="card-header">
+              <h2 class="card-title">Spending by Category</h2>
+            </div>
+            <!-- Chart canvas -->
+            <div class="chart-doughnut-wrapper" id="dashboard-chart-wrapper">
+              <canvas id="dashboardChart" aria-label="Spending by category chart"
+                      role="img"></canvas>
+              <!-- Legend injected by dashboard.js -->
+              <div class="chart-legend" id="dashboard-chart-legend"></div>
+            </div>
+            <!-- Empty state (hidden until needed by JS) -->
+            <div class="chart-empty hidden" id="dashboard-chart-empty">
+              <svg class="chart-empty__icon" xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+              </svg>
+              <p class="chart-empty__text">No expense data yet.<br>Add expenses to see your spending breakdown.</p>
+            </div>
+          </div>
+
+          <!-- Recent transactions card -->
+          <div class="card" id="recent-transactions-card">
+            <div class="card-header">
+              <h2 class="card-title">Recent Transactions</h2>
+              <button class="card-action-link" id="btn-view-all"
+                      aria-label="View all transactions">View all →</button>
+            </div>
+            <!-- Transaction rows injected by dashboard.js -->
+            <div class="transaction-list" id="recent-transactions-list"></div>
+            <!-- Empty state -->
+            <div class="empty-state hidden" id="recent-transactions-empty">
+              <svg class="empty-state__icon" xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m17 11-5-5-5 5"/><path d="m17 18-5-5-5 5"/>
+              </svg>
+              <p class="empty-state__heading">No transactions yet</p>
+              <p class="empty-state__body">Add your first income or expense to get started.</p>
+            </div>
+          </div>
+
+        </div><!-- /dashboard-lower -->
+
+      </section><!-- /page-dashboard -->
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           SECTION: TRANSACTIONS  (Task 19)
+           ═══════════════════════════════════════════════════════════════ -->
+      <section id="page-transactions" class="page-section hidden"
+               role="main" aria-label="Transactions" hidden>
+
+        <!-- Filters bar -->
+        <div class="table-filters">
+          <div class="search-wrapper">
+            <svg class="search-wrapper__icon" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input class="input input--search" id="search-transactions"
+                   type="search" placeholder="Search transactions..."
+                   aria-label="Search transactions" autocomplete="off">
+            <button class="search-wrapper__clear" id="search-clear" aria-label="Clear search">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <select class="input input--select" id="filter-category">
+            <option value="">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <input class="input input--date" id="filter-date-from" type="date"
+                 aria-label="From date">
+          <input class="input input--date" id="filter-date-to" type="date"
+                 aria-label="To date">
+
+          <div class="table-filters__spacer"></div>
+
+          <button class="btn btn-ghost" id="btn-export-csv" aria-label="Export to CSV">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export CSV
+          </button>
+        </div>
+
+        <!-- Table inside a card -->
+        <div class="card">
+          <table class="data-table" id="transactions-table" aria-label="Transactions list">
+            <thead>
+              <tr>
+                <th class="col-date">Date</th>
+                <th class="col-type">Type</th>
+                <th class="col-title">Title</th>
+                <th class="col-category">Category</th>
+                <th class="col-amount">Amount</th>
+                <th class="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-tbody">
+              <!-- Injected by transactions.js -->
+            </tbody>
+          </table>
+
+          <!-- Empty state -->
+          <div class="empty-state hidden" id="transactions-empty">
+            <svg class="empty-state__icon" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m17 11-5-5-5 5"/><path d="m17 18-5-5-5 5"/>
+            </svg>
+            <p class="empty-state__heading">No transactions yet</p>
+            <p class="empty-state__body">Add your first income or expense to get started.</p>
+          </div>
+        </div>
+
+      </section><!-- /page-transactions -->
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           SECTION: STATISTICS  (Task 20)
+           ═══════════════════════════════════════════════════════════════ -->
+      <section id="page-statistics" class="page-section hidden"
+               role="main" aria-label="Statistics" hidden>
+
+        <!-- Three summary cards -->
+        <div class="stat-grid">
+          <div class="card stat-card" id="stat-card-income">
+            <div class="stat-card__meta">
+              <svg class="stat-card__icon stat-card__icon--income"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+              <span class="stat-card__label">Total Income</span>
+            </div>
+            <div class="stat-card__value stat-card__value--income"
+                 id="stats-total-income" aria-label="Total income">$0.00</div>
+          </div>
+
+          <div class="card stat-card" id="stat-card-expenses">
+            <div class="stat-card__meta">
+              <svg class="stat-card__icon stat-card__icon--expense"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
+                <polyline points="16 17 22 17 22 11"/>
+              </svg>
+              <span class="stat-card__label">Total Expenses</span>
+            </div>
+            <div class="stat-card__value stat-card__value--expense"
+                 id="stats-total-expenses" aria-label="Total expenses">$0.00</div>
+          </div>
+
+          <div class="card stat-card" id="stat-card-balance">
+            <div class="stat-card__meta">
+              <svg class="stat-card__icon stat-card__icon--balance"
+                   xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+              </svg>
+              <span class="stat-card__label">Balance</span>
+            </div>
+            <div class="stat-card__value stat-card__value--balance"
+                 id="stats-balance" aria-label="Current balance">$0.00</div>
+          </div>
+        </div><!-- /stat-grid -->
+
+        <!-- Charts stack -->
+        <div class="charts-stack">
+
+          <!-- Pie chart -->
+          <div class="card chart-card" id="statistics-chart-card">
+            <div class="card-header">
+              <h2 class="card-title">Spending by Category</h2>
+            </div>
+            <div class="chart-doughnut-wrapper" id="statistics-chart-wrapper">
+              <canvas id="statisticsChart" aria-label="Spending by category chart"
+                      role="img"></canvas>
+              <div class="chart-legend" id="statistics-chart-legend"></div>
+            </div>
+            <div class="chart-empty hidden" id="statistics-chart-empty">
+              <svg class="chart-empty__icon" xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+              </svg>
+              <p class="chart-empty__text">No expense data yet.</p>
+            </div>
+          </div>
+
+          <!-- Bar chart -->
+          <div class="card chart-card" id="monthly-chart-card">
+            <div class="card-header">
+              <h2 class="card-title">Monthly Expenses</h2>
+            </div>
+            <div class="chart-bar-wrapper" id="monthly-chart-wrapper">
+              <canvas id="monthlyChart" aria-label="Monthly expenses bar chart"
+                      role="img"></canvas>
+            </div>
+            <div class="chart-empty hidden" id="monthly-chart-empty">
+              <svg class="chart-empty__icon" xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" x2="18" y1="20" y2="10"/>
+                <line x1="12" x2="12" y1="20" y2="4"/>
+                <line x1="6"  x2="6"  y1="20" y2="14"/>
+              </svg>
+              <p class="chart-empty__text">No expense data yet.</p>
+            </div>
+          </div>
+
+        </div><!-- /charts-stack -->
+
+      </section><!-- /page-statistics -->
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           SECTION: SETTINGS  (Task 21)
+           ═══════════════════════════════════════════════════════════════ -->
+      <section id="page-settings" class="page-section hidden"
+               role="main" aria-label="Settings" hidden>
+
+        <!-- Settings card -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <h2 class="card-title">General Settings</h2>
+          </div>
+
+          <div class="settings-form">
+            <!-- Currency -->
+            <div class="form-group">
+              <label for="currency-select" class="form-label">Currency</label>
+              <select class="input input--select" id="currency-select"
+                      aria-label="Select currency">
+                <option value="USD">US Dollar (USD)</option>
+                <option value="EUR">Euro (EUR)</option>
+                <option value="GBP">British Pound (GBP)</option>
+                <option value="JPY">Japanese Yen (JPY)</option>
+                <option value="INR">Indian Rupee (INR)</option>
+              </select>
+            </div>
+
+            <!-- Theme -->
+            <div class="form-group">
+              <label class="form-label">Theme</label>
+              <div class="theme-toggle theme-toggle--settings" role="group" aria-label="Theme selection">
+                <button class="theme-toggle__btn active" id="settings-theme-light" aria-pressed="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                  </svg>
+                  Light
+                </button>
+                <button class="theme-toggle__btn" id="settings-theme-dark" aria-pressed="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                  </svg>
+                  Dark
+                </button>
+              </div>
+            </div>
+
+            <!-- Export CSV -->
+            <div class="form-group form-group--export">
+              <label class="form-label">Export Data</label>
+              <p class="form-hint">Export all transactions as a CSV file for backup or analysis.</p>
+              <button class="btn btn-ghost" id="btn-export-settings" aria-label="Export to CSV">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export CSV
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Database info card -->
+        <div class="card info-card">
+          <div class="card-header">
+            <h2 class="card-title">About</h2>
+          </div>
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-label">Application Version</span>
+              <span class="info-value" id="app-version">v1.0.0</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Database Location</span>
+              <span class="info-value" id="db-location">Loading...</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Transactions</span>
+              <span class="info-value" id="db-transaction-count">0</span>
+            </div>
+          </div>
+        </div>
+
+      </section><!-- /page-settings -->
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           MODAL (Task 22)
+           ═══════════════════════════════════════════════════════════════ -->
+      <div class="modal-overlay hidden" id="modal-overlay" role="dialog" aria-hidden="true"
+           aria-labelledby="modal-title" aria-modal="true">
+        <div class="modal" id="modal">
+          <div class="modal-header">
+            <h2 class="modal-title" id="modal-title">Add Transaction</h2>
+            <button class="modal-close" id="modal-close" aria-label="Close modal">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <form class="modal-form" id="modal-form">
+            <!-- Hidden ID field for edit mode -->
+            <input type="hidden" id="modal-id" name="id" value="">
+            <input type="hidden" id="modal-type" name="type" value="">
+
+            <!-- Title -->
+            <div class="form-group">
+              <label for="modal-title-input" class="form-label">Title *</label>
+              <input type="text" class="input" id="modal-title-input"
+                     name="title" placeholder="Salary, Groceries, etc."
+                     autocomplete="off" required>
+              <span class="form-error" id="error-title" aria-live="polite"></span>
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+              <label for="modal-amount-input" class="form-label">Amount *</label>
+              <div class="input-wrapper">
+                <span class="input-prefix" id="modal-amount-prefix">$</span>
+                <input type="number" class="input input--amount" id="modal-amount-input"
+                       name="amount" placeholder="0.00" step="0.01" min="0.01"
+                       autocomplete="off" required>
+              </div>
+              <span class="form-error" id="error-amount" aria-live="polite"></span>
+            </div>
+
+            <!-- Category (only for expenses) -->
+            <div class="form-group hidden" id="modal-category-group">
+              <label for="modal-category-select" class="form-label">Category *</label>
+              <select class="input input--select" id="modal-category-select" name="category">
+                <option value="">Select category</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="form-error" id="error-category" aria-live="polite"></span>
+            </div>
+
+            <!-- Date -->
+            <div class="form-group">
+              <label for="modal-date-input" class="form-label">Date *</label>
+              <input type="date" class="input input--date" id="modal-date-input"
+                     name="date" required>
+              <span class="form-error" id="error-date" aria-live="polite"></span>
+            </div>
+
+            <!-- Note -->
+            <div class="form-group">
+              <label for="modal-note-textarea" class="form-label">Note</label>
+              <textarea class="input input--textarea" id="modal-note-textarea"
+                        name="note" placeholder="Optional note..." rows="3"></textarea>
+            </div>
+
+            <!-- Form actions -->
+            <div class="modal-actions">
+              <button type="button" class="btn btn-ghost" id="modal-cancel">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" id="modal-save">
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           TOAST NOTIFICATION
+           ═══════════════════════════════════════════════════════════════ -->
+      <div class="toast-container" id="toast-container" aria-live="polite">
+        <div class="toast hidden" id="toast">
+          <div class="toast__icon" id="toast-icon"></div>
+          <div class="toast__content">
+            <p class="toast__message" id="toast-message"></p>
+          </div>
+          <button class="toast__close" id="toast-close" aria-label="Dismiss notification">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </main><!-- /content-area -->
+
+  </div><!-- /main-column -->
+
+</div><!-- /app-shell -->
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     SCRIPTS
+     ───────────────────────────────────────────────────────────────────── -->
+<!-- Chart.js UMD bundle -->
+<script src="../assets/chart.umd.min.js"></script>
+
+<!-- Main renderer logic -->
+<script src="../js/renderer.js" type="module"></script>
+
+<!-- Page-specific modules (loaded dynamically) -->
+<!-- <script src="../js/dashboard.js" type="module"></script> -->
+<!-- <script src="../js/transactions.js" type="module"></script> -->
+<!-- <script src="../js/statistics.js" type="module"></script> -->
+<!-- <script src="../js/settings.js" type="module"></script> -->
+<!-- <script src="../js/form-validator.js" type="module"></script> -->
+
+</body>
+</html>

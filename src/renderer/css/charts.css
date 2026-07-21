@@ -1,0 +1,187 @@
+/* ==========================================================================
+   charts.css — Chart Container and Layout Styles
+   Personal Expense Tracker · Design System v1.0
+   ==========================================================================
+   Handles sizing, layout, and empty-state display for all Chart.js canvases.
+   Chart data/color configuration is handled in statistics.js and dashboard.js.
+
+   Load order in index.html:
+     1. themes.css
+     2. main.css
+     3. components.css
+     4. charts.css  ← this file
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DASHBOARD — Lower section layout
+      Doughnut chart (left, 60%) + Recent transactions (right, 40%)
+   -------------------------------------------------------------------------- */
+
+.dashboard-lower {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+/* Stack vertically on narrower windows */
+@media (max-width: 1100px) {
+  .dashboard-lower {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. CHART CARD — shared wrapper for any chart panel
+   -------------------------------------------------------------------------- */
+
+.chart-card {
+  /* Extends .card — apply both classes in HTML */
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+
+/* The canvas gets a max-height to prevent runaway growth */
+.chart-card canvas {
+  max-height: 320px;
+  width: 100% !important; /* override Chart.js inline style */
+}
+
+/* --------------------------------------------------------------------------
+   3. DOUGHNUT CHART — Dashboard "Spending by Category"
+   -------------------------------------------------------------------------- */
+
+.chart-doughnut-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: var(--space-4) 0 var(--space-2);
+}
+
+/* The canvas itself */
+.chart-doughnut-wrapper canvas {
+  max-width: 260px;
+  max-height: 260px;
+}
+
+/* Legend below the doughnut */
+.chart-legend {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2) var(--space-4);
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.chart-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.chart-legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.chart-legend__label {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart-legend__value {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--color-text-primary);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. BAR CHART — Statistics page "Monthly Expenses"
+   -------------------------------------------------------------------------- */
+
+.chart-bar-wrapper {
+  position: relative;
+  flex: 1;
+  /* Minimum height ensures the chart doesn't collapse */
+  min-height: 240px;
+  padding-top: var(--space-3);
+}
+
+.chart-bar-wrapper canvas {
+  max-height: 280px;
+}
+
+/* --------------------------------------------------------------------------
+   5. STATISTICS PAGE — Charts section layout
+      Pie chart card + Bar chart card stacked vertically with spacing.
+   -------------------------------------------------------------------------- */
+
+.charts-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+/* --------------------------------------------------------------------------
+   6. EMPTY CHART STATE
+      Shown inside the chart card when there is no expense data.
+   -------------------------------------------------------------------------- */
+
+.chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 200px;
+  text-align: center;
+  padding: var(--space-8) var(--space-6);
+}
+
+.chart-empty__icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-border);
+  stroke-width: 1.25;
+  margin-bottom: var(--space-3);
+}
+
+.chart-empty__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-sm);
+  max-width: 220px;
+}
+
+/* --------------------------------------------------------------------------
+   7. CHART COLOR VARIABLES
+      These match the design system chart palette.
+      Referenced by JS when building Chart.js dataset backgroundColor arrays.
+      Kept here for documentation; actual values used in JS via getComputedStyle.
+   -------------------------------------------------------------------------- */
+
+/*
+  --chart-food:          #5C6BC0
+  --chart-transport:     #26C6DA
+  --chart-shopping:      #AB47BC
+  --chart-bills:         #EF5350
+  --chart-entertainment: #FFA726
+  --chart-healthcare:    #66BB6A
+  --chart-other:         #78909C
+*/
+
+/* The JS chart modules read these via:
+   getComputedStyle(document.documentElement).getPropertyValue('--chart-food').trim()
+*/
